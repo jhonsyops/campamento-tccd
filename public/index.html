@@ -7,10 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.1/dist/umd/supabase.js" integrity="sha384-EjUdIVmzWliPzdzhxZ9ZoO0etXLKWuUPUftAGxP6qH6Lm4oLwoLaJR0Ba4pIDiDL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.29.7/babel.min.js" integrity="sha384-ezQ6HS3FLspd9te19o2McUV6FAK091+GG7KO54f/R8DKgCDi7fULhapNrd5LY+vG" crossorigin="anonymous"></script>
 <style>
 :root{
   --bg:#080d1a;--bg-2:#0b1224;--panel:#111a31;--panel-2:#0d1528;
@@ -33,14 +33,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .splash{position:fixed;inset:0;background:radial-gradient(120% 120% at 50% 40%,#0e1830,#05080f);z-index:300;display:grid;place-items:center;transition:transform .65s cubic-bezier(.7,0,.3,1)}
 .splash.off{transform:translateY(-101%)}
 .sp-l{overflow:hidden;text-align:center}
-.sp-l span{display:block;font-family:'Sora';font-weight:800;color:#fff;font-size:clamp(34px,7vw,84px);letter-spacing:-2px;transform:translateY(110%);animation:rise .8s .15s var(--ease) forwards;text-transform:uppercase;line-height:1.05}
+.sp-l span{display:block;font-family:'Sora',sans-serif;font-weight:800;color:#fff;font-size:clamp(34px,7vw,84px);letter-spacing:-2px;transform:translateY(110%);animation:rise .8s .15s var(--ease) forwards;text-transform:uppercase;line-height:1.05}
 .sp-l:nth-child(2) span{animation-delay:.3s;-webkit-text-stroke:1.5px var(--accent);color:transparent}
 .sprog{position:fixed;top:0;left:0;right:0;height:2.5px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transform:scaleX(0);transform-origin:left;z-index:120;box-shadow:0 0 12px var(--accent-glow)}
 .demo-bar{background:var(--accent);color:#fff;padding:9px 22px;font-size:12px;font-weight:700;text-align:center;letter-spacing:.5px;text-transform:uppercase;position:sticky;top:0;z-index:30}
 .loading-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:100;animation:lbar 1.2s var(--ease) infinite;box-shadow:0 0 10px var(--accent-glow)}
 @keyframes lbar{0%{width:0;left:0}50%{width:60%;left:20%}100%{width:0;left:100%}}
 nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0;border-bottom:1px solid var(--line)}
-.logo{display:flex;align-items:center;gap:12px;font-family:'Sora';font-weight:800;font-size:17px;letter-spacing:-.5px;cursor:pointer;color:var(--ink)}
+.logo{display:flex;align-items:center;gap:12px;font-family:'Sora',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.5px;cursor:pointer;color:var(--ink)}
 .logo .mark{width:38px;height:38px;border-radius:3px;background:var(--accent);display:grid;place-items:center;color:#fff;transition:transform .5s var(--ease);box-shadow:0 0 18px var(--accent-glow)}
 .logo:hover .mark{transform:rotate(-8deg) scale(1.05)}
 .navlinks{display:flex;gap:2px}
@@ -68,7 +68,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0
 .tag .ln{width:42px;height:1px;background:var(--accent)}
 .tag .dot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:blink 1.6s infinite;box-shadow:0 0 8px var(--accent)}
 @keyframes blink{50%{opacity:.2}}
-.hero h1{font-family:'Sora';font-weight:800;font-size:clamp(54px,12vw,150px);line-height:.9;letter-spacing:-4px;text-transform:uppercase}
+.hero h1{font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(54px,12vw,150px);line-height:.9;letter-spacing:-4px;text-transform:uppercase}
 .hl{overflow:hidden;display:block}
 .hl span{display:inline-block;transform:translateY(110%);animation:rise 1s var(--ease) forwards}
 .hl:nth-child(2) span{animation-delay:.12s}.hl:nth-child(3) span{animation-delay:.24s}
@@ -76,25 +76,25 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0
 .hl .out{-webkit-text-stroke:2px var(--ink);color:transparent}
 .hero-foot{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-top:44px}
 .hero-foot p{max-width:380px;color:var(--g1);font-size:16px;line-height:1.55}
-.year-big{font-family:'Sora';font-weight:800;font-size:clamp(80px,16vw,220px);line-height:.8;letter-spacing:-6px;-webkit-text-stroke:2px var(--line-2);color:transparent;text-align:right;margin-top:26px;opacity:.8;user-select:none;will-change:transform}
+.year-big{position:relative;z-index:1;font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(80px,16vw,220px);line-height:.8;letter-spacing:-6px;-webkit-text-stroke:2px var(--line-2);color:transparent;text-align:right;margin-top:26px;opacity:.8;user-select:none;will-change:transform}
 .rot{position:absolute;right:6px;top:86px;width:128px;height:128px;animation:spin 16s linear infinite;cursor:pointer;z-index:5}
 .rot:hover{animation-play-state:paused}
 @keyframes spin{to{transform:rotate(360deg)}}
-.rot text{font-family:'Sora';font-weight:700;font-size:10.2px;letter-spacing:2.6px;text-transform:uppercase;fill:var(--ink)}
+.rot text{font-family:'Sora',sans-serif;font-weight:700;font-size:10.2px;letter-spacing:2.6px;text-transform:uppercase;fill:var(--ink)}
 .rot-c{position:absolute;inset:0;display:grid;place-items:center;animation:spin 16s linear infinite reverse;color:var(--accent)}
 .marquee{overflow:hidden;border-top:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);padding:16px 0;margin:60px 0;background:var(--accent);transform:skewX(var(--vskew,0deg))}
 .marquee-track{display:inline-flex;white-space:nowrap;animation:marq 24s linear infinite}
-.marquee-track span{font-family:'Sora';font-weight:800;font-size:clamp(22px,3.5vw,40px);color:#fff;text-transform:uppercase;letter-spacing:-1px;padding:0 26px}
+.marquee-track span{font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,40px);color:#fff;text-transform:uppercase;letter-spacing:-1px;padding:0 26px}
 .marquee-track span.o{-webkit-text-stroke:1.5px #fff;color:transparent}
 @keyframes marq{to{transform:translateX(-50%)}}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);margin:30px 0}
 .tile{padding:38px 30px;cursor:pointer;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .4s var(--ease);position:relative;overflow:hidden}
 .tile:nth-child(3n){border-right:none}
-.tile .tnum{position:absolute;right:-14px;bottom:-34px;font-family:'Sora';font-weight:800;font-size:130px;letter-spacing:-6px;-webkit-text-stroke:1.5px var(--line-2);color:transparent;transition:.4s var(--ease);user-select:none}
+.tile .tnum{position:absolute;right:-14px;bottom:-34px;font-family:'Sora',sans-serif;font-weight:800;font-size:130px;letter-spacing:-6px;-webkit-text-stroke:1.5px var(--line-2);color:transparent;transition:.4s var(--ease);user-select:none}
 .tile:hover .tnum{-webkit-text-stroke-color:rgba(255,255,255,.4);transform:translateY(-8px)}
 .tile .tico{width:50px;height:50px;border-radius:3px;background:var(--accent);color:#fff;display:grid;place-items:center;margin-bottom:42px;transition:.4s var(--ease)}
 .tile:hover .tico{background:#fff;color:var(--accent);transform:rotate(-6deg)}
-.tile h3{font-family:'Sora';font-size:23px;margin:0 0 10px;letter-spacing:-.6px;transition:transform .4s var(--ease);position:relative;z-index:2}
+.tile h3{font-family:'Sora',sans-serif;font-size:23px;margin:0 0 10px;letter-spacing:-.6px;transition:transform .4s var(--ease);position:relative;z-index:2}
 .tile p{color:var(--g2);font-size:14px;line-height:1.55;transition:color .4s;position:relative;z-index:2}
 .tile .go{position:absolute;top:34px;right:30px;transition:transform .4s var(--ease);z-index:2;color:var(--accent)}
 .tile:hover{background:var(--accent);color:#fff}
@@ -102,22 +102,22 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0
 .tile:hover h3{transform:translateX(6px)}
 .tile:hover .go{transform:translate(5px,-5px);color:#fff}
 .sec-head{display:flex;align-items:baseline;gap:16px;margin:0 0 8px}
-.sec-head .idx{font-family:'Sora';font-size:13px;font-weight:700;color:var(--accent)}
-.sec-head h2{font-family:'Sora';font-size:clamp(30px,5vw,46px);letter-spacing:-1.5px;text-transform:uppercase;line-height:1}
+.sec-head .idx{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--accent)}
+.sec-head h2{font-family:'Sora',sans-serif;font-size:clamp(30px,5vw,46px);letter-spacing:-1.5px;text-transform:uppercase;line-height:1}
 .sec-sub{color:var(--g2);font-size:15px;margin-bottom:30px}
 .band{display:grid;grid-template-columns:1.3fr 1fr;gap:0;border:1px solid var(--line);margin:36px 0;background:var(--panel)}
 .band>div{padding:30px 32px}
 .band .left{border-right:1px solid var(--line)}
 .band .lbl{font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g2);margin-bottom:16px}
 .cd{display:flex;gap:22px}
-.cd .u b{font-family:'Sora';font-size:clamp(38px,6vw,58px);line-height:1;letter-spacing:-2px;display:block}
+.cd .u b{font-family:'Sora',sans-serif;font-size:clamp(38px,6vw,58px);line-height:1;letter-spacing:-2px;display:block}
 .cd .u i{font-style:normal;font-size:12px;color:var(--g2);text-transform:uppercase;letter-spacing:1px}
-.cupo-num{font-family:'Sora';font-size:clamp(34px,5vw,50px);letter-spacing:-2px}
+.cupo-num{font-family:'Sora',sans-serif;font-size:clamp(34px,5vw,50px);letter-spacing:-2px}
 .cupo-num small{font-size:18px;color:var(--g3)}
 .cupobar{height:6px;background:var(--soft-2);margin-top:16px;overflow:hidden}
 .cupobar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 1.2s var(--ease)}
 .panel{background:var(--panel);border:1px solid var(--line);padding:40px;max-width:680px;margin:30px auto}
-.panel h2{font-family:'Sora';font-size:30px;letter-spacing:-1px;text-transform:uppercase;margin-bottom:6px}
+.panel h2{font-family:'Sora',sans-serif;font-size:30px;letter-spacing:-1px;text-transform:uppercase;margin-bottom:6px}
 .panel .lead{color:var(--g2);margin-bottom:30px;font-size:15px}
 label{display:block;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.8px;margin:0 0 9px;color:var(--g1)}
 .field{margin-bottom:22px}
@@ -136,7 +136,7 @@ select option{background:var(--panel)}
 .tierbox{display:flex;align-items:center;gap:12px;padding:16px 18px;border:1.5px solid var(--accent);margin-bottom:22px;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.5px;animation:fadein .4s both}
 .tierbox.kids{border-color:var(--kids);background:var(--kids-soft);color:var(--kids-ink)}
 .tierbox.normal{border-color:var(--normal);background:var(--normal-soft);color:var(--normal-ink)}
-.tierbox .amt{margin-left:auto;font-family:'Sora';font-size:20px}
+.tierbox .amt{margin-left:auto;font-family:'Sora',sans-serif;font-size:20px}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;border:1.3px solid var(--line-2);color:var(--ink)}
 .badge.fill{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -153,12 +153,12 @@ select option{background:var(--panel)}
 @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}@keyframes draw{to{stroke-dashoffset:0}}
 .codebox{border:1.5px solid var(--accent);padding:22px;margin:22px 0;text-align:center;background:var(--accent-deep)}
 .codebox .lbl{font-size:11px;opacity:.7;letter-spacing:2px;text-transform:uppercase}
-.codebox .code{font-family:'Sora';font-size:32px;letter-spacing:4px;margin-top:8px;color:#fff}
+.codebox .code{font-family:'Sora',sans-serif;font-size:32px;letter-spacing:4px;margin-top:8px;color:#fff}
 .balcard{background:linear-gradient(135deg,#1a2a57,#0c1428);color:#fff;padding:30px;margin-bottom:22px;position:relative;overflow:hidden;border:1px solid var(--accent);box-shadow:0 0 40px rgba(58,109,255,.18)}
-.balcard::after{content:"TCCD";position:absolute;right:-18px;bottom:-30px;font-family:'Sora';font-weight:800;font-size:110px;letter-spacing:-5px;-webkit-text-stroke:1px rgba(255,255,255,.12);color:transparent;user-select:none}
+.balcard::after{content:"TCCD";position:absolute;right:-18px;bottom:-30px;font-family:'Sora',sans-serif;font-weight:800;font-size:110px;letter-spacing:-5px;-webkit-text-stroke:1px rgba(255,255,255,.12);color:transparent;user-select:none}
 .balgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px;position:relative;z-index:2}
 .balgrid .b .k{font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:1px}
-.balgrid .b .v{font-family:'Sora';font-size:24px;margin-top:6px}
+.balgrid .b .v{font-family:'Sora',sans-serif;font-size:24px;margin-top:6px}
 .progress{height:6px;background:rgba(255,255,255,.18);margin-top:22px;overflow:hidden;position:relative;z-index:2}
 .progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-2),#fff);transition:width 1.1s var(--ease)}
 .progress>i.pend{position:absolute;top:0;background:repeating-linear-gradient(45deg,#fff,#fff 4px,transparent 4px,transparent 8px);opacity:.5}
@@ -169,10 +169,10 @@ select option{background:var(--panel)}
 .chip-opt.full{grid-column:span 3}
 .bankcard{border:1.5px solid var(--line-2);padding:20px 22px;margin-bottom:12px;display:flex;align-items:center;gap:16px;transition:.3s var(--ease);background:var(--panel-2)}
 .bankcard:hover{background:var(--panel);border-color:var(--accent)}
-.bankcard .bk{width:46px;height:46px;border-radius:3px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:'Sora';font-weight:800;font-size:13px;flex-shrink:0}
+.bankcard .bk{width:46px;height:46px;border-radius:3px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:'Sora',sans-serif;font-weight:800;font-size:13px;flex-shrink:0}
 .bankcard .info{flex:1;min-width:0}
 .bankcard .bname{font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
-.bankcard .bnum{font-family:'Sora';font-size:17px;letter-spacing:1px;margin-top:2px;color:var(--accent-2)}
+.bankcard .bnum{font-family:'Sora',sans-serif;font-size:17px;letter-spacing:1px;margin-top:2px;color:var(--accent-2)}
 .bankcard .bmeta{font-size:12px;color:var(--g2);margin-top:2px}
 .copybtn{border:1.5px solid var(--line-2);background:var(--panel-2);padding:9px 14px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;border-radius:3px;transition:.2s;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;display:inline-flex;align-items:center;gap:7px;color:var(--ink)}
 .copybtn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -190,13 +190,13 @@ select option{background:var(--panel)}
 .stat{padding:22px;border-right:1px solid var(--line);position:relative}
 .stat:last-child{border-right:none}
 .stat .k{font-size:11px;color:var(--g2);font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.stat .v{font-family:'Sora';font-size:30px;margin-top:8px;letter-spacing:-1.5px}.stat .v.sm{font-size:23px}
+.stat .v{font-family:'Sora',sans-serif;font-size:30px;margin-top:8px;letter-spacing:-1.5px}.stat .v.sm{font-size:23px}
 .stat .split{font-size:11.5px;color:var(--g2);margin-top:8px;line-height:1.6}
 .stat .split b{color:var(--ink)}
 .stat.attn::after{content:"";position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--warn);animation:blink 1.4s infinite;box-shadow:0 0 8px var(--warn)}
 .adminrow{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:26px}
 .box{border:1px solid var(--line);padding:24px;background:var(--panel)}
-.box h4{font-family:'Sora';font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;display:flex;justify-content:space-between}
+.box h4{font-family:'Sora',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;display:flex;justify-content:space-between}
 .goalbar{height:10px;background:var(--soft-2);overflow:hidden;margin:14px 0 8px;position:relative}
 .goalbar>i{display:block;height:100%;transition:width 1.2s var(--ease)}
 .goalbar .tr{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
@@ -205,7 +205,7 @@ select option{background:var(--panel)}
 .legend i{font-style:normal}
 .tallagrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .tallabox{border:1px solid var(--line);padding:12px;text-align:center}
-.tallabox b{font-family:'Sora';font-size:24px;display:block}.tallabox i{font-style:normal;font-size:11px;color:var(--g2);text-transform:uppercase;letter-spacing:.5px}
+.tallabox b{font-family:'Sora',sans-serif;font-size:24px;display:block}.tallabox i{font-style:normal;font-size:11px;color:var(--g2);text-transform:uppercase;letter-spacing:.5px}
 .tablewrap{border:1px solid var(--line);overflow:hidden;margin-bottom:20px;background:var(--panel)}.tablescroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:900px}
 th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--g1);padding:13px 16px;background:var(--soft);white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid var(--line)}
@@ -230,14 +230,14 @@ tr.kids-row td:first-child{box-shadow:inset 4px 0 0 var(--kids)}tr.normal-row td
 .alertrow .nm{flex:1;min-width:0}
 .alertrow .nm b{display:block;font-size:15px}
 .alertrow .nm i{font-style:normal;font-size:12px;color:var(--g2)}
-.alertrow .debt{font-family:'Sora';font-weight:800;font-size:17px;color:#ff8585;white-space:nowrap}
+.alertrow .debt{font-family:'Sora',sans-serif;font-weight:800;font-size:17px;color:#ff8585;white-space:nowrap}
 .minibar{width:90px;height:5px;background:var(--soft-2);overflow:hidden;flex-shrink:0}
 .minibar i{display:block;height:100%;background:var(--accent)}
 .vcard{border:1.5px solid var(--line-2);margin-bottom:16px;animation:fadein .4s both;background:var(--panel)}
 .vcard .vhead{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .vcard .vhead .who b{font-size:15px;display:block}
 .vcard .vhead .who i{font-style:normal;font-size:12px;color:var(--g2)}
-.vcard .vhead .amt{margin-left:auto;font-family:'Sora';font-weight:800;font-size:20px}
+.vcard .vhead .amt{margin-left:auto;font-family:'Sora',sans-serif;font-weight:800;font-size:20px}
 .vcard .vbody{padding:16px 20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
 .vcard .vmeta{font-size:13px;line-height:1.9;color:var(--g1)}
 .vcard .vmeta b{text-transform:uppercase;font-size:11px;letter-spacing:.5px;color:var(--g2);display:inline-block;width:90px}
@@ -247,7 +247,7 @@ tr.kids-row td:first-child{box-shadow:inset 4px 0 0 var(--kids)}tr.normal-row td
 .bigshot img{max-width:100%;max-height:90vh;border:2px solid var(--accent)}
 .overlay{position:fixed;inset:0;background:rgba(4,7,15,.72);backdrop-filter:blur(4px);z-index:50;display:grid;place-items:center;padding:20px;animation:fadein .25s both}
 .modal{background:var(--panel);border:1.5px solid var(--line-2);padding:32px;max-width:480px;width:100%;animation:pop .35s var(--ease) both;position:relative;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-.modal h3{font-family:'Sora';font-size:22px;text-transform:uppercase;letter-spacing:-.5px;margin-bottom:4px}
+.modal h3{font-family:'Sora',sans-serif;font-size:22px;text-transform:uppercase;letter-spacing:-.5px;margin-bottom:4px}
 .close{position:absolute;top:18px;right:18px;background:var(--panel-2);border:1.5px solid var(--line-2);width:36px;height:36px;cursor:pointer;font-size:16px;color:var(--ink);transition:.2s;z-index:5}.close:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
 .detail-grid .d .k{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--g2)}
@@ -261,19 +261,18 @@ tr.kids-row td:first-child{box-shadow:inset 4px 0 0 var(--kids)}tr.normal-row td
 .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:14px 24px;font-weight:700;font-size:13px;z-index:90;animation:up .4s both;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 0 30px rgba(58,109,255,.25)}
 @keyframes up{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
 footer{border-top:1.5px solid var(--accent);padding:54px 0 34px;margin-top:80px}
-.f-big{font-family:'Sora';font-weight:800;font-size:clamp(30px,6vw,72px);letter-spacing:-2.5px;text-transform:uppercase;line-height:1;margin-bottom:30px}
+.f-big{font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(30px,6vw,72px);letter-spacing:-2.5px;text-transform:uppercase;line-height:1;margin-bottom:30px}
 .f-big .o{-webkit-text-stroke:1.5px var(--ink);color:transparent}
 .f-meta{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--g2);text-transform:uppercase;letter-spacing:1px;border-top:1px solid var(--line);padding-top:22px}
 .wavefield{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .hero .tag,.hero h1,.hero-foot{position:relative;z-index:3}
-.year-big{position:relative;z-index:1}
 .hl2{display:block;will-change:contents}
 .flapwrap{display:flex;gap:16px;flex-wrap:wrap}
 .flapunit{display:flex;flex-direction:column;gap:9px;align-items:center}
 .flaprow{display:flex;gap:4px}
 .flap{position:relative;width:clamp(32px,5.5vw,50px);height:clamp(46px,8vw,70px);background:linear-gradient(180deg,#16213d,#0b1224);border-radius:4px;overflow:hidden;display:grid;place-items:center;box-shadow:inset 0 -2px 6px rgba(0,0,0,.5),0 0 0 1px var(--line-2)}
 .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.5);z-index:3}
-.flap-in{font-family:'Sora';font-weight:800;font-size:clamp(24px,4.6vw,42px);color:#fff;animation:flip .55s var(--ease) both;transform-origin:center top;backface-visibility:hidden}
+.flap-in{font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(24px,4.6vw,42px);color:#fff;animation:flip .55s var(--ease) both;transform-origin:center top;backface-visibility:hidden}
 @keyframes flip{0%{transform:rotateX(-90deg);opacity:0}55%{transform:rotateX(12deg);opacity:1}100%{transform:rotateX(0)}}
 .flaplbl{font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g2)}
 /* ===== Animaciones internas + componentes nuevos ===== */
@@ -293,17 +292,17 @@ footer{border-top:1.5px solid var(--accent);padding:54px 0 34px;margin-top:80px}
 /* Resumen / dashboard */
 .dash{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;border:1px solid var(--line);background:var(--panel);padding:26px;margin-bottom:22px}
 .ring{position:relative;display:grid;place-items:center}
-.ring .rc{font-family:'Sora';font-weight:800;font-size:30px;position:absolute;letter-spacing:-1px}
+.ring .rc{font-family:'Sora',sans-serif;font-weight:800;font-size:30px;position:absolute;letter-spacing:-1px}
 .ring .rc small{display:block;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--g2);text-transform:uppercase;margin-top:2px}
 .barlist{display:flex;flex-direction:column;gap:14px}
 .barrow .bl{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px}
-.barrow .bl b{font-family:'Sora'}
+.barrow .bl b{font-family:'Sora',sans-serif}
 .bartrack{height:9px;background:var(--soft-2);overflow:hidden;border-radius:100px}
 .bartrack>i{display:block;height:100%;border-radius:100px;transition:width 1.1s var(--ease)}
 .dash-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--panel);margin-bottom:22px}
 .dash-mini .m{padding:20px;border-right:1px solid var(--line);text-align:center}
 .dash-mini .m:last-child{border-right:none}
-.dash-mini .m .v{font-family:'Sora';font-size:26px;letter-spacing:-1px}
+.dash-mini .m .v{font-family:'Sora',sans-serif;font-size:26px;letter-spacing:-1px}
 .dash-mini .m .k{font-size:11px;color:var(--g2);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
 @media(max-width:760px){.dash{grid-template-columns:1fr;justify-items:center;text-align:center}}
 /* Cabañas */
@@ -893,14 +892,14 @@ function Portal({me,onReport,onExit}){
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:14,marginBottom:22}}>
       <div>
         <div style={{fontSize:12,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:"var(--g3)"}}>Mi portal</div>
-        <h2 style={{fontFamily:"'Sora'",fontSize:34,letterSpacing:-1.5,textTransform:"uppercase",lineHeight:1,marginTop:6}}>Hola,<br/>{me.name.split(" ")[0]}</h2>
+        <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:34,letterSpacing:-1.5,textTransform:"uppercase",lineHeight:1,marginTop:6}}>Hola,<br/>{me.name.split(" ")[0]}</h2>
       </div>
       <button className="btn btn-ghost btn-sm" onClick={onExit}><span><I n="out" s={14}/> Salir</span></button>
     </div>
     <div style={{border:"1.5px solid var(--ink)",display:"flex",alignItems:"center",gap:14,padding:"14px 18px",marginBottom:18,flexWrap:"wrap"}}>
       <div style={{flex:1,minWidth:140}}>
         <div style={{fontSize:10.5,letterSpacing:1.5,textTransform:"uppercase",color:"var(--g2)"}}>Tu código</div>
-        <div style={{fontFamily:"'Sora'",fontSize:24,letterSpacing:3,marginTop:2}}>{me.code}</div>
+        <div style={{fontFamily:"'Sora',sans-serif",fontSize:24,letterSpacing:3,marginTop:2}}>{me.code}</div>
       </div>
       <button className={"copybtn"+(copied?" ok":"")} onClick={copyCode}>{copied?<><I n="check" s={13}/> Copiado</>:<><I n="copy" s={13}/> Copiar código</>}</button>
     </div>
@@ -908,7 +907,7 @@ function Portal({me,onReport,onExit}){
       <div style={{width:42,height:42,borderRadius:3,background:"var(--accent)",color:"#fff",display:"grid",placeItems:"center",flexShrink:0}}><I n="tent" s={22}/></div>
       <div>
         <div style={{fontSize:10.5,letterSpacing:1.5,textTransform:"uppercase",color:"var(--g2)"}}>Tu cabaña</div>
-        <div style={{fontFamily:"'Sora'",fontWeight:800,fontSize:18,marginTop:2,color:"#fff"}}>{me.cabin}</div>
+        <div style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:18,marginTop:2,color:"#fff"}}>{me.cabin}</div>
       </div>
     </div>}
     <div className="balcard">
@@ -936,7 +935,7 @@ function Portal({me,onReport,onExit}){
         const[ic,txt,cls]=stMap[rp.status]||stMap.pending;
         return(<div key={i} style={{border:"1px solid var(--line)",padding:"13px 16px",marginBottom:8,display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
           <div style={{flex:1,minWidth:160}}>
-            <b style={{fontFamily:"'Sora'",fontSize:16}}>{money(rp.amount)}</b>
+            <b style={{fontFamily:"'Sora',sans-serif",fontSize:16}}>{money(rp.amount)}</b>
             <div style={{fontSize:12.5,color:"var(--g2)",marginTop:2}}>{rp.bank} · {(rp.date||rp.created_at||"").slice(0,10)}{rp.ref?" · ref "+rp.ref:""}</div>
             {rp.status==='rejected'&&rp.reject_reason&&<div style={{fontSize:12.5,color:"var(--warn)",marginTop:4}}>Motivo: {rp.reject_reason}. Puedes reportarla de nuevo.</div>}
           </div>
@@ -1183,7 +1182,7 @@ function CabinsTab({registrants,onCabin}){
   const asign=registrants.length-sin.length;
   return(<div>
     <div className="toolbar">
-      <div style={{fontSize:13,color:"var(--g2)"}}><b style={{color:"var(--ink)",fontFamily:"'Sora'",fontSize:16}}>{asign}</b> de {registrants.length} asignados a cabaña</div>
+      <div style={{fontSize:13,color:"var(--g2)"}}><b style={{color:"var(--ink)",fontFamily:"'Sora',sans-serif",fontSize:16}}>{asign}</b> de {registrants.length} asignados a cabaña</div>
       <button className="btn btn-pri btn-sm" onClick={()=>pdfCabins(registrants)}><span><I n="down" s={14}/> Imprimir cabañas (PDF)</span></button>
     </div>
     {sin.length>0&&<div className="box" style={{marginBottom:18,borderStyle:"dashed",borderColor:"var(--line-2)"}}>
@@ -1285,7 +1284,7 @@ function VerifyTab({pending,approve,reject}){
   const[reason,setReason]=useState("");
   if(pending.length===0)return(<div className="box" style={{textAlign:"center",padding:50}}>
     <div style={{marginBottom:12}}><I n="check" s={34}/></div>
-    <h3 style={{fontFamily:"'Sora'",textTransform:"uppercase"}}>Todo verificado</h3>
+    <h3 style={{fontFamily:"'Sora',sans-serif",textTransform:"uppercase"}}>Todo verificado</h3>
     <p style={{color:"var(--g2)",fontSize:14,marginTop:8}}>No hay transferencias pendientes de revisión.</p></div>);
   return(<>
     <div className="secbanner"><I n="bank" s={16}/> <span>Compara cada reporte con el <b>estado de cuenta del banco</b> antes de aprobar. Al aprobar, el monto se suma automáticamente al abono de la persona.</span></div>
@@ -1331,7 +1330,7 @@ function AlertsTab({debtors,dl}){
     </div>
     {debtors.length===0&&<div className="box" style={{textAlign:"center",padding:50}}>
       <div style={{marginBottom:12}}><I n="check" s={34}/></div>
-      <h3 style={{fontFamily:"'Sora'",textTransform:"uppercase"}}>Todos al día</h3>
+      <h3 style={{fontFamily:"'Sora',sans-serif",textTransform:"uppercase"}}>Todos al día</h3>
       <p style={{color:"var(--g2)",fontSize:14,marginTop:8}}>Nadie tiene balance pendiente.</p></div>}
     {debtors.length>0&&<div className="box">
       {debtors.map(r=>{const pd=paidOf(r),bal=r.total-pd,pct=Math.round(pd/r.total*100);
