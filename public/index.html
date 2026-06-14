@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Campamento TCCD — Registro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+:root{
+  --bg:#080d1a;--bg-2:#0b1224;--panel:#111a31;--panel-2:#0d1528;
+  --ink:#eef2fb;--ink-soft:#d4dbef;
+  --accent:#3a6dff;--accent-2:#6a93ff;--accent-deep:#16244d;--accent-glow:rgba(58,109,255,.35);
+  --line:#222c46;--line-2:#2e3a5a;--soft:#0f1729;--soft-2:#16213a;
+  --g1:#c7cfe6;--g2:#8a93ad;--g3:#646e8c;--g4:#39435f;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --kids:#f0a93a;--kids-soft:#2a2012;--kids-ink:#f4c277;
+  --normal:#5b86ff;--normal-soft:#152348;--normal-ink:#a9c0ff;
+  --ok:#28c878;--ok-soft:#0f3020;--warn:#ff5d5d;--warn-soft:#341619;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+::selection{background:var(--accent);color:#fff}
+html{scroll-behavior:smooth}html,body{height:100%}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:screen;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:0 26px}
+.ic{display:inline-flex;vertical-align:-3px}
+.splash{position:fixed;inset:0;background:radial-gradient(120% 120% at 50% 40%,#0e1830,#05080f);z-index:300;display:grid;place-items:center;transition:transform .65s cubic-bezier(.7,0,.3,1)}
+.splash.off{transform:translateY(-101%)}
+.sp-l{overflow:hidden;text-align:center}
+.sp-l span{display:block;font-family:'Sora';font-weight:800;color:#fff;font-size:clamp(34px,7vw,84px);letter-spacing:-2px;transform:translateY(110%);animation:rise .8s .15s var(--ease) forwards;text-transform:uppercase;line-height:1.05}
+.sp-l:nth-child(2) span{animation-delay:.3s;-webkit-text-stroke:1.5px var(--accent);color:transparent}
+.sprog{position:fixed;top:0;left:0;right:0;height:2.5px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transform:scaleX(0);transform-origin:left;z-index:120;box-shadow:0 0 12px var(--accent-glow)}
+.demo-bar{background:var(--accent);color:#fff;padding:9px 22px;font-size:12px;font-weight:700;text-align:center;letter-spacing:.5px;text-transform:uppercase;position:sticky;top:0;z-index:30}
+.loading-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:100;animation:lbar 1.2s var(--ease) infinite;box-shadow:0 0 10px var(--accent-glow)}
+@keyframes lbar{0%{width:0;left:0}50%{width:60%;left:20%}100%{width:0;left:100%}}
+nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:12px;font-family:'Sora';font-weight:800;font-size:17px;letter-spacing:-.5px;cursor:pointer;color:var(--ink)}
+.logo .mark{width:38px;height:38px;border-radius:3px;background:var(--accent);display:grid;place-items:center;color:#fff;transition:transform .5s var(--ease);box-shadow:0 0 18px var(--accent-glow)}
+.logo:hover .mark{transform:rotate(-8deg) scale(1.05)}
+.navlinks{display:flex;gap:2px}
+.navlinks button{font-family:inherit;font-weight:600;font-size:13.5px;color:var(--g2);background:transparent;border:none;padding:10px 16px;cursor:pointer;position:relative;transition:color .25s}
+.navlinks button::after{content:"";position:absolute;left:16px;right:16px;bottom:6px;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.navlinks button:hover{color:var(--ink)}.navlinks button:hover::after{transform:scaleX(1)}
+.navlinks button.on{color:var(--ink)}.navlinks button.on::after{transform:scaleX(1)}
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.btn{font-family:inherit;font-weight:700;font-size:15px;border:1.5px solid var(--line-2);border-radius:3px;padding:15px 26px;cursor:pointer;transition:transform .3s var(--ease),background .3s,color .3s,box-shadow .3s;position:relative;overflow:hidden;will-change:transform;color:var(--ink);background:transparent}
+.btn span{position:relative;z-index:2;display:inline-flex;align-items:center;gap:9px;justify-content:center;width:100%}
+.btn-pri{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 22px var(--accent-glow)}
+.btn-pri::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateY(101%);transition:transform .4s var(--ease);z-index:1}
+.btn-pri:hover{color:var(--bg)}.btn-pri:hover::before{transform:translateY(0)}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-ghost::before{content:"";position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .4s var(--ease);z-index:1}
+.btn-ghost:hover{color:#fff;border-color:var(--accent)}.btn-ghost:hover::before{transform:translateY(0)}
+.btn-ok{border-color:var(--ok);background:var(--ok);color:#04130b}.btn-ok::before{background:var(--ink)}.btn-ok:hover{color:var(--bg)}.btn-ok:hover::before{transform:translateY(0)}
+.btn-warn{border-color:var(--warn);background:transparent;color:var(--warn)}.btn-warn::before{background:var(--warn)}.btn-warn:hover{color:#fff}.btn-warn:hover::before{transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}.btn:disabled::before{display:none}
+.btn-sm{padding:9px 15px;font-size:12.5px}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap}
+.hero{padding:74px 0 0;position:relative}
+.tag{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:30px;color:var(--g1)}
+.tag .ln{width:42px;height:1px;background:var(--accent)}
+.tag .dot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:blink 1.6s infinite;box-shadow:0 0 8px var(--accent)}
+@keyframes blink{50%{opacity:.2}}
+.hero h1{font-family:'Sora';font-weight:800;font-size:clamp(54px,12vw,150px);line-height:.9;letter-spacing:-4px;text-transform:uppercase}
+.hl{overflow:hidden;display:block}
+.hl span{display:inline-block;transform:translateY(110%);animation:rise 1s var(--ease) forwards}
+.hl:nth-child(2) span{animation-delay:.12s}.hl:nth-child(3) span{animation-delay:.24s}
+@keyframes rise{to{transform:translateY(0)}}
+.hl .out{-webkit-text-stroke:2px var(--ink);color:transparent}
+.hero-foot{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-top:44px}
+.hero-foot p{max-width:380px;color:var(--g1);font-size:16px;line-height:1.55}
+.year-big{font-family:'Sora';font-weight:800;font-size:clamp(80px,16vw,220px);line-height:.8;letter-spacing:-6px;-webkit-text-stroke:2px var(--line-2);color:transparent;text-align:right;margin-top:26px;opacity:.8;user-select:none;will-change:transform}
+.rot{position:absolute;right:6px;top:86px;width:128px;height:128px;animation:spin 16s linear infinite;cursor:pointer;z-index:5}
+.rot:hover{animation-play-state:paused}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rot text{font-family:'Sora';font-weight:700;font-size:10.2px;letter-spacing:2.6px;text-transform:uppercase;fill:var(--ink)}
+.rot-c{position:absolute;inset:0;display:grid;place-items:center;animation:spin 16s linear infinite reverse;color:var(--accent)}
+.marquee{overflow:hidden;border-top:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);padding:16px 0;margin:60px 0;background:var(--accent);transform:skewX(var(--vskew,0deg))}
+.marquee-track{display:inline-flex;white-space:nowrap;animation:marq 24s linear infinite}
+.marquee-track span{font-family:'Sora';font-weight:800;font-size:clamp(22px,3.5vw,40px);color:#fff;text-transform:uppercase;letter-spacing:-1px;padding:0 26px}
+.marquee-track span.o{-webkit-text-stroke:1.5px #fff;color:transparent}
+@keyframes marq{to{transform:translateX(-50%)}}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);margin:30px 0}
+.tile{padding:38px 30px;cursor:pointer;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .4s var(--ease);position:relative;overflow:hidden}
+.tile:nth-child(3n){border-right:none}
+.tile .tnum{position:absolute;right:-14px;bottom:-34px;font-family:'Sora';font-weight:800;font-size:130px;letter-spacing:-6px;-webkit-text-stroke:1.5px var(--line-2);color:transparent;transition:.4s var(--ease);user-select:none}
+.tile:hover .tnum{-webkit-text-stroke-color:rgba(255,255,255,.4);transform:translateY(-8px)}
+.tile .tico{width:50px;height:50px;border-radius:3px;background:var(--accent);color:#fff;display:grid;place-items:center;margin-bottom:42px;transition:.4s var(--ease)}
+.tile:hover .tico{background:#fff;color:var(--accent);transform:rotate(-6deg)}
+.tile h3{font-family:'Sora';font-size:23px;margin:0 0 10px;letter-spacing:-.6px;transition:transform .4s var(--ease);position:relative;z-index:2}
+.tile p{color:var(--g2);font-size:14px;line-height:1.55;transition:color .4s;position:relative;z-index:2}
+.tile .go{position:absolute;top:34px;right:30px;transition:transform .4s var(--ease);z-index:2;color:var(--accent)}
+.tile:hover{background:var(--accent);color:#fff}
+.tile:hover p{color:rgba(255,255,255,.85)}
+.tile:hover h3{transform:translateX(6px)}
+.tile:hover .go{transform:translate(5px,-5px);color:#fff}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin:0 0 8px}
+.sec-head .idx{font-family:'Sora';font-size:13px;font-weight:700;color:var(--accent)}
+.sec-head h2{font-family:'Sora';font-size:clamp(30px,5vw,46px);letter-spacing:-1.5px;text-transform:uppercase;line-height:1}
+.sec-sub{color:var(--g2);font-size:15px;margin-bottom:30px}
+.band{display:grid;grid-template-columns:1.3fr 1fr;gap:0;border:1px solid var(--line);margin:36px 0;background:var(--panel)}
+.band>div{padding:30px 32px}
+.band .left{border-right:1px solid var(--line)}
+.band .lbl{font-size:11.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g2);margin-bottom:16px}
+.cd{display:flex;gap:22px}
+.cd .u b{font-family:'Sora';font-size:clamp(38px,6vw,58px);line-height:1;letter-spacing:-2px;display:block}
+.cd .u i{font-style:normal;font-size:12px;color:var(--g2);text-transform:uppercase;letter-spacing:1px}
+.cupo-num{font-family:'Sora';font-size:clamp(34px,5vw,50px);letter-spacing:-2px}
+.cupo-num small{font-size:18px;color:var(--g3)}
+.cupobar{height:6px;background:var(--soft-2);margin-top:16px;overflow:hidden}
+.cupobar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 1.2s var(--ease)}
+.panel{background:var(--panel);border:1px solid var(--line);padding:40px;max-width:680px;margin:30px auto}
+.panel h2{font-family:'Sora';font-size:30px;letter-spacing:-1px;text-transform:uppercase;margin-bottom:6px}
+.panel .lead{color:var(--g2);margin-bottom:30px;font-size:15px}
+label{display:block;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.8px;margin:0 0 9px;color:var(--g1)}
+.field{margin-bottom:22px}
+input,select,textarea{width:100%;font-family:inherit;font-size:15px;padding:14px 16px;border:1.5px solid var(--line-2);border-radius:3px;background:var(--panel-2);transition:.2s;color:var(--ink)}
+input::placeholder,textarea::placeholder{color:var(--g3)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+select option{background:var(--panel)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.hint{font-size:12.5px;color:var(--g2);margin-top:7px}.req{color:var(--warn)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg .opt{border:1.5px solid var(--line-2);border-radius:3px;padding:16px;cursor:pointer;text-align:center;transition:.25s var(--ease)}
+.seg .opt:hover{border-color:var(--accent)}
+.seg .opt.sel{border-color:var(--accent);background:var(--accent);color:#fff}
+.seg .opt .t{font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}
+.seg .opt .d{font-size:12px;color:var(--g2);margin-top:4px}
+.seg .opt.sel .d{color:rgba(255,255,255,.8)}
+.tierbox{display:flex;align-items:center;gap:12px;padding:16px 18px;border:1.5px solid var(--accent);margin-bottom:22px;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.5px;animation:fadein .4s both}
+.tierbox.kids{border-color:var(--kids);background:var(--kids-soft);color:var(--kids-ink)}
+.tierbox.normal{border-color:var(--normal);background:var(--normal-soft);color:var(--normal-ink)}
+.tierbox .amt{margin-left:auto;font-family:'Sora';font-size:20px}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;border:1.3px solid var(--line-2);color:var(--ink)}
+.badge.fill{background:var(--accent);color:#fff;border-color:var(--accent)}
+.badge.out{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.badge.soft{background:var(--soft-2);color:var(--g1);border-color:transparent}
+.badge.k{background:var(--kids-soft);color:var(--kids-ink);border-color:var(--kids)}
+.badge.n{background:var(--normal-soft);color:var(--normal-ink);border-color:var(--normal)}
+.badge.ok{background:var(--ok-soft);color:#3ee08c;border-color:var(--ok)}
+.badge.wr{background:var(--warn-soft);color:#ff8585;border-color:var(--warn)}
+.badge.dash{border-style:dashed}
+.success{text-align:center;padding:14px 0}
+.check{width:80px;height:80px;border-radius:50%;border:2px solid var(--accent);display:grid;place-items:center;margin:0 auto 20px;animation:pop .5s var(--ease) both;box-shadow:0 0 26px var(--accent-glow)}
+.check svg{width:40px;height:40px;stroke:var(--accent);stroke-width:3.5;fill:none;stroke-linecap:round;stroke-dasharray:48;stroke-dashoffset:48;animation:draw .6s .3s forwards}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}@keyframes draw{to{stroke-dashoffset:0}}
+.codebox{border:1.5px solid var(--accent);padding:22px;margin:22px 0;text-align:center;background:var(--accent-deep)}
+.codebox .lbl{font-size:11px;opacity:.7;letter-spacing:2px;text-transform:uppercase}
+.codebox .code{font-family:'Sora';font-size:32px;letter-spacing:4px;margin-top:8px;color:#fff}
+.balcard{background:linear-gradient(135deg,#1a2a57,#0c1428);color:#fff;padding:30px;margin-bottom:22px;position:relative;overflow:hidden;border:1px solid var(--accent);box-shadow:0 0 40px rgba(58,109,255,.18)}
+.balcard::after{content:"TCCD";position:absolute;right:-18px;bottom:-30px;font-family:'Sora';font-weight:800;font-size:110px;letter-spacing:-5px;-webkit-text-stroke:1px rgba(255,255,255,.12);color:transparent;user-select:none}
+.balgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px;position:relative;z-index:2}
+.balgrid .b .k{font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:1px}
+.balgrid .b .v{font-family:'Sora';font-size:24px;margin-top:6px}
+.progress{height:6px;background:rgba(255,255,255,.18);margin-top:22px;overflow:hidden;position:relative;z-index:2}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-2),#fff);transition:width 1.1s var(--ease)}
+.progress>i.pend{position:absolute;top:0;background:repeating-linear-gradient(45deg,#fff,#fff 4px,transparent 4px,transparent 8px);opacity:.5}
+.histrow{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}.histrow:last-child{border:none}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.chip-opt{border:1.5px solid var(--line-2);border-radius:3px;padding:13px 8px;text-align:center;cursor:pointer;font-weight:700;font-size:14px;transition:.2s}
+.chip-opt:hover{border-color:var(--accent)}.chip-opt.sel{border-color:var(--accent);background:var(--accent);color:#fff}
+.chip-opt.full{grid-column:span 3}
+.bankcard{border:1.5px solid var(--line-2);padding:20px 22px;margin-bottom:12px;display:flex;align-items:center;gap:16px;transition:.3s var(--ease);background:var(--panel-2)}
+.bankcard:hover{background:var(--panel);border-color:var(--accent)}
+.bankcard .bk{width:46px;height:46px;border-radius:3px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:'Sora';font-weight:800;font-size:13px;flex-shrink:0}
+.bankcard .info{flex:1;min-width:0}
+.bankcard .bname{font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+.bankcard .bnum{font-family:'Sora';font-size:17px;letter-spacing:1px;margin-top:2px;color:var(--accent-2)}
+.bankcard .bmeta{font-size:12px;color:var(--g2);margin-top:2px}
+.copybtn{border:1.5px solid var(--line-2);background:var(--panel-2);padding:9px 14px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;border-radius:3px;transition:.2s;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;display:inline-flex;align-items:center;gap:7px;color:var(--ink)}
+.copybtn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.copybtn.ok{background:var(--ok);border-color:var(--ok);color:#04130b}
+.upload{border:2px dashed var(--line-2);border-radius:3px;padding:26px;text-align:center;cursor:pointer;transition:.25s;position:relative}
+.upload:hover{border-color:var(--accent);background:var(--panel-2)}
+.upload input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.upload .uic{margin-bottom:10px;color:var(--accent)}
+.upload .t{font-weight:700;font-size:14px}.upload .d{font-size:12px;color:var(--g2);margin-top:4px}
+.thumb{position:relative;border:1.5px solid var(--accent);padding:8px;display:flex;align-items:center;gap:12px;background:var(--panel-2)}
+.thumb img{width:64px;height:64px;object-fit:cover;border:1px solid var(--line)}
+.thumb .tx{flex:1;font-size:13px;font-weight:600;word-break:break-all}
+.thumb button{border:none;background:var(--accent);color:#fff;width:28px;height:28px;cursor:pointer;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);margin-bottom:26px;background:var(--panel)}
+.stat{padding:22px;border-right:1px solid var(--line);position:relative}
+.stat:last-child{border-right:none}
+.stat .k{font-size:11px;color:var(--g2);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.stat .v{font-family:'Sora';font-size:30px;margin-top:8px;letter-spacing:-1.5px}.stat .v.sm{font-size:23px}
+.stat .split{font-size:11.5px;color:var(--g2);margin-top:8px;line-height:1.6}
+.stat .split b{color:var(--ink)}
+.stat.attn::after{content:"";position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--warn);animation:blink 1.4s infinite;box-shadow:0 0 8px var(--warn)}
+.adminrow{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:26px}
+.box{border:1px solid var(--line);padding:24px;background:var(--panel)}
+.box h4{font-family:'Sora';font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:18px;display:flex;justify-content:space-between}
+.goalbar{height:10px;background:var(--soft-2);overflow:hidden;margin:14px 0 8px;position:relative}
+.goalbar>i{display:block;height:100%;transition:width 1.2s var(--ease)}
+.goalbar .tr{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.goalbar .ef{background:var(--g2);position:absolute;top:0}
+.legend{display:flex;gap:18px;font-size:12px;color:var(--g2);margin-top:8px;flex-wrap:wrap}
+.legend i{font-style:normal}
+.tallagrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tallabox{border:1px solid var(--line);padding:12px;text-align:center}
+.tallabox b{font-family:'Sora';font-size:24px;display:block}.tallabox i{font-style:normal;font-size:11px;color:var(--g2);text-transform:uppercase;letter-spacing:.5px}
+.tablewrap{border:1px solid var(--line);overflow:hidden;margin-bottom:20px;background:var(--panel)}.tablescroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--g1);padding:13px 16px;background:var(--soft);white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid var(--line)}
+th:hover{background:var(--soft-2)}th .ar{color:var(--g3);font-size:9px}
+td{padding:14px 16px;border-top:1px solid var(--line);font-size:14px}
+tbody tr{cursor:pointer;transition:background .15s}tbody tr:hover{background:var(--soft-2)}
+tr.kids-row td:first-child{box-shadow:inset 4px 0 0 var(--kids)}tr.normal-row td:first-child{box-shadow:inset 4px 0 0 var(--normal)}
+.tabs{display:flex;gap:2px;border:1px solid var(--line);flex-wrap:wrap;background:var(--panel)}
+.tabs button{font-family:inherit;font-weight:700;font-size:12.5px;color:var(--g2);background:transparent;border:none;padding:10px 16px;cursor:pointer;transition:.2s;text-transform:uppercase;letter-spacing:.5px}
+.tabs button.on{background:var(--accent);color:#fff}
+.tabs .pip{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:100px;background:var(--warn);color:#fff;font-size:10.5px;margin-left:6px;padding:0 5px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:18px}
+.searchwrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.searchwrap input{width:210px;padding:10px 14px;font-size:14px}
+.toggle{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--g2);cursor:pointer;user-select:none;border:1.5px solid var(--line-2);padding:9px 14px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px}.toggle.on{color:var(--ink);border-color:var(--accent)}
+.iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border:1.5px solid var(--line-2);background:var(--panel-2);cursor:pointer;text-decoration:none;transition:.2s;color:var(--ink)}.iconbtn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.secbanner{display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--line-2);border-style:dashed;padding:14px 16px;font-size:13px;line-height:1.5;margin-bottom:22px;color:var(--g1)}
+.errbanner{border:1.5px solid var(--warn);color:#ff8585;padding:13px 16px;font-size:13px;margin-bottom:18px;font-weight:600;background:var(--warn-soft)}
+.alertband{border:1.5px solid var(--warn);background:var(--warn-soft);padding:18px 22px;margin-bottom:22px;display:flex;gap:14px;align-items:center;animation:fadein .5s both}
+.alertband b{color:#ff8585}
+.alertrow{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.alertrow:last-child{border:none}
+.alertrow .nm{flex:1;min-width:0}
+.alertrow .nm b{display:block;font-size:15px}
+.alertrow .nm i{font-style:normal;font-size:12px;color:var(--g2)}
+.alertrow .debt{font-family:'Sora';font-weight:800;font-size:17px;color:#ff8585;white-space:nowrap}
+.minibar{width:90px;height:5px;background:var(--soft-2);overflow:hidden;flex-shrink:0}
+.minibar i{display:block;height:100%;background:var(--accent)}
+.vcard{border:1.5px solid var(--line-2);margin-bottom:16px;animation:fadein .4s both;background:var(--panel)}
+.vcard .vhead{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.vcard .vhead .who b{font-size:15px;display:block}
+.vcard .vhead .who i{font-style:normal;font-size:12px;color:var(--g2)}
+.vcard .vhead .amt{margin-left:auto;font-family:'Sora';font-weight:800;font-size:20px}
+.vcard .vbody{padding:16px 20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.vcard .vmeta{font-size:13px;line-height:1.9;color:var(--g1)}
+.vcard .vmeta b{text-transform:uppercase;font-size:11px;letter-spacing:.5px;color:var(--g2);display:inline-block;width:90px}
+.vshot{width:90px;height:90px;object-fit:cover;border:1.5px solid var(--accent);cursor:zoom-in}
+.vfoot{display:flex;gap:10px;padding:0 20px 18px;flex-wrap:wrap}
+.bigshot{position:fixed;inset:0;background:rgba(4,7,15,.9);z-index:95;display:grid;place-items:center;padding:24px;cursor:zoom-out;backdrop-filter:blur(4px)}
+.bigshot img{max-width:100%;max-height:90vh;border:2px solid var(--accent)}
+.overlay{position:fixed;inset:0;background:rgba(4,7,15,.72);backdrop-filter:blur(4px);z-index:50;display:grid;place-items:center;padding:20px;animation:fadein .25s both}
+.modal{background:var(--panel);border:1.5px solid var(--line-2);padding:32px;max-width:480px;width:100%;animation:pop .35s var(--ease) both;position:relative;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.modal h3{font-family:'Sora';font-size:22px;text-transform:uppercase;letter-spacing:-.5px;margin-bottom:4px}
+.close{position:absolute;top:18px;right:18px;background:var(--panel-2);border:1.5px solid var(--line-2);width:36px;height:36px;cursor:pointer;font-size:16px;color:var(--ink);transition:.2s;z-index:5}.close:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.detail-grid .d .k{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--g2)}
+.detail-grid .d .v{font-weight:700;font-size:15px;margin-top:3px}
+.steps{display:flex;gap:8px;margin-bottom:24px}
+.steps i{flex:1;height:3px;background:var(--soft-2);font-style:normal;transition:.4s}
+.steps i.on{background:var(--accent)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}
+.confetti i{position:absolute;top:-10px;width:8px;height:8px;background:var(--accent);animation:drop linear forwards}
+@keyframes drop{to{transform:translateY(105vh) rotate(680deg)}}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:14px 24px;font-weight:700;font-size:13px;z-index:90;animation:up .4s both;text-transform:uppercase;letter-spacing:.5px;box-shadow:0 0 30px rgba(58,109,255,.25)}
+@keyframes up{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+footer{border-top:1.5px solid var(--accent);padding:54px 0 34px;margin-top:80px}
+.f-big{font-family:'Sora';font-weight:800;font-size:clamp(30px,6vw,72px);letter-spacing:-2.5px;text-transform:uppercase;line-height:1;margin-bottom:30px}
+.f-big .o{-webkit-text-stroke:1.5px var(--ink);color:transparent}
+.f-meta{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--g2);text-transform:uppercase;letter-spacing:1px;border-top:1px solid var(--line);padding-top:22px}
+.wavefield{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero .tag,.hero h1,.hero-foot{position:relative;z-index:3}
+.year-big{position:relative;z-index:1}
+.hl2{display:block;will-change:contents}
+.flapwrap{display:flex;gap:16px;flex-wrap:wrap}
+.flapunit{display:flex;flex-direction:column;gap:9px;align-items:center}
+.flaprow{display:flex;gap:4px}
+.flap{position:relative;width:clamp(32px,5.5vw,50px);height:clamp(46px,8vw,70px);background:linear-gradient(180deg,#16213d,#0b1224);border-radius:4px;overflow:hidden;display:grid;place-items:center;box-shadow:inset 0 -2px 6px rgba(0,0,0,.5),0 0 0 1px var(--line-2)}
+.flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.5);z-index:3}
+.flap-in{font-family:'Sora';font-weight:800;font-size:clamp(24px,4.6vw,42px);color:#fff;animation:flip .55s var(--ease) both;transform-origin:center top;backface-visibility:hidden}
+@keyframes flip{0%{transform:rotateX(-90deg);opacity:0}55%{transform:rotateX(12deg);opacity:1}100%{transform:rotateX(0)}}
+.flaplbl{font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g2)}
+/* ===== Animaciones internas + componentes nuevos ===== */
+@keyframes rowin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes subin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes popin{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.subfade{animation:subin .38s var(--ease) both}
+.rowin{animation:rowin .45s var(--ease) both}
+.popin{animation:popin .5s var(--ease) both}
+.checkpill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line-2);background:var(--panel-2);color:var(--g2);font-family:inherit;font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;padding:7px 12px;border-radius:100px;cursor:pointer;transition:.25s var(--ease)}
+.checkpill:hover{border-color:var(--ok)}
+.checkpill.on{background:var(--ok);border-color:var(--ok);color:#04130b;animation:popin .4s var(--ease)}
+.checkpill.on .ic{animation:pop .4s var(--ease)}
+.note-area{margin:4px 0 14px}
+.note-area textarea{min-height:62px;font-size:13.5px}
+.note-tag{position:absolute;top:14px;right:58px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+/* Resumen / dashboard */
+.dash{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;border:1px solid var(--line);background:var(--panel);padding:26px;margin-bottom:22px}
+.ring{position:relative;display:grid;place-items:center}
+.ring .rc{font-family:'Sora';font-weight:800;font-size:30px;position:absolute;letter-spacing:-1px}
+.ring .rc small{display:block;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--g2);text-transform:uppercase;margin-top:2px}
+.barlist{display:flex;flex-direction:column;gap:14px}
+.barrow .bl{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px}
+.barrow .bl b{font-family:'Sora'}
+.bartrack{height:9px;background:var(--soft-2);overflow:hidden;border-radius:100px}
+.bartrack>i{display:block;height:100%;border-radius:100px;transition:width 1.1s var(--ease)}
+.dash-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);background:var(--panel);margin-bottom:22px}
+.dash-mini .m{padding:20px;border-right:1px solid var(--line);text-align:center}
+.dash-mini .m:last-child{border-right:none}
+.dash-mini .m .v{font-family:'Sora';font-size:26px;letter-spacing:-1px}
+.dash-mini .m .k{font-size:11px;color:var(--g2);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+@media(max-width:760px){.dash{grid-template-columns:1fr;justify-items:center;text-align:center}}
+/* Cabañas */
+.cabgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cabcard h4{margin-bottom:12px}
+.cabmem{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.cabmem:last-child{border-bottom:none}
+.cabmem .nm{flex:1;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:8px}
+.cabmem .lead-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent-2);border:1px solid var(--accent);border-radius:100px;padding:1px 7px}
+.cabx{width:26px;height:26px;border:1.5px solid var(--line-2);background:transparent;color:var(--g2);cursor:pointer;border-radius:4px;display:grid;place-items:center;transition:.2s;flex-shrink:0}
+.cabx:hover{background:var(--warn);border-color:var(--warn);color:#fff}
+.cabprint{width:28px;height:28px;border:1.5px solid var(--line-2);background:transparent;color:var(--g2);cursor:pointer;border-radius:4px;display:grid;place-items:center;transition:.2s}
+.cabprint:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+@media(max-width:760px){.cabgrid{grid-template-columns:1fr}}
+@media(max-width:760px){.tiles,.stats,.adminrow,.band{grid-template-columns:1fr}.row2,.balgrid,.detail-grid{grid-template-columns:1fr}.navlinks{display:none}.searchwrap input{width:100%}.tile:nth-child(3n){border-right:1px solid var(--line)}.tallagrid{grid-template-columns:repeat(3,1fr)}.vcard .vbody{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--line)}}
+
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ⚙️ PASO 1 — credenciales Supabase (mientras tanto corre en demo) */
+const SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
+const SUPABASE_KEY = "TU_ANON_KEY";
+const IS_PROD = !SUPABASE_URL.includes("TU-PROYECTO");
+const sb = IS_PROD ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+/* ⚙️ PASO 2 — CONFIGURACIÓN DEL CAMPAMENTO */
+const CONFIG = {
+  campamento:"Campamento de Jóvenes 2026",
+  iglesia:"TCCD",
+  iglesias:["TCCD — Casa de Dios (Baní)","Invitado / Otra iglesia"],
+  abonoMin:500, abonoStep:500,
+  tallas:["Niño S","Niño M","Niño L","S","M","L","XL","XXL"],
+  fechaCampamento:"2026-08-15T08:00:00",
+  cupoMax:80,
+  alertaDias:30,
+  cuentas:[
+    {banco:"Banreservas", corto:"BR", numero:"9601234567", tipo:"Cuenta de Ahorros", titular:"Templo Comunitario Casa de Dios"},
+    {banco:"Banco Popular", corto:"BP", numero:"781234567", tipo:"Cuenta de Ahorros", titular:"Templo Comunitario Casa de Dios"},
+    {banco:"Banco BHD", corto:"BHD", numero:"2101234567", tipo:"Cuenta de Ahorros", titular:"Templo Comunitario Casa de Dios"},
+  ],
+  /* ⚙️ Cabañas — edita nombres y capacidad a tu gusto */
+  cabanas:[
+    {nombre:"Cabaña 1 · Varones A", cap:12},
+    {nombre:"Cabaña 2 · Varones B", cap:12},
+    {nombre:"Cabaña 3 · Hembras A", cap:12},
+    {nombre:"Cabaña 4 · Hembras B", cap:12},
+  ],
+};
+const TIERS=[
+  {id:"kids",  label:"0 a 10 años",        min:0, max:10, price:2500, cls:"kids"},
+  {id:"normal",label:"11 años en adelante",min:11,max:120,price:4500, cls:"normal"},
+];
+const DEMO_ADMINS=[
+  {email:"jhonfrer@tccd.do",pass:"campamento26"},
+  {email:"genesis@tccd.do",pass:"campamento26"},
+  {email:"tesoreria@tccd.do",pass:"campamento26"},
+];
+
+/* ===== ICONOGRAFÍA PROFESIONAL (SVG, trazo consistente) ===== */
+const P={
+  tent:<><path d="M3.5 21 12 4l8.5 17"/><path d="m12 13 4.5 8"/><path d="M12 13 7.5 21"/><path d="M2 21h20"/></>,
+  pen:<><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></>,
+  bank:<><path d="M3 21h18"/><path d="M4 10h16"/><path d="m5 6 7-3 7 3"/><path d="M5 10v11"/><path d="M19 10v11"/><path d="M9 14v3"/><path d="M15 14v3"/></>,
+  shield:<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>,
+  check:<path d="M20 6 9 17l-5-5"/>,
+  x:<><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>,
+  clock:<><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>,
+  alert:<><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></>,
+  msg:<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 20l1-5a8.4 8.4 0 1 1 17-3.5z"/>,
+  copy:<><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
+  down:<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></>,
+  arrowr:<><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>,
+  arrowur:<><path d="M7 17 17 7"/><path d="M7 7h10v10"/></>,
+  img:<><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></>,
+  refresh:<><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10"/><path d="M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></>,
+  shirt:<path d="M16 3l5 3-2 4-2-1v12H7V9L5 10 3 6l5-3a4 4 0 0 0 8 0z"/>,
+  cash:<><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01"/><path d="M18 12h.01"/></>,
+  swap:<><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></>,
+  user:<><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
+  users:<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></>,
+  out:<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></>,
+  search:<><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>,
+  list:<><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></>,
+};
+const I=({n,s=18,sw=2,style})=>(<svg className="ic" width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" style={style} aria-hidden="true">{P[n]}</svg>);
+
+const tierFor=(a)=>TIERS.find(t=>a>=t.min&&a<=t.max)||TIERS[TIERS.length-1];
+const money=(n)=>"RD$ "+n.toLocaleString("es-DO");
+const genCode=()=>CONFIG.iglesia+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
+const waNum=(p)=>{let d=(p||"").replace(/\D/g,"");return d.length===10?"1"+d:d;};
+const paidOf=(r)=>(r.payments||[]).reduce((s,p)=>s+p.amount,0);
+const cashOf=(r)=>(r.payments||[]).filter(p=>p.kind==='cash').reduce((s,p)=>s+p.amount,0);
+const transferOf=(r)=>(r.payments||[]).filter(p=>p.kind==='transfer').reduce((s,p)=>s+p.amount,0);
+const statusOf=(r)=>{const p=paidOf(r);return p>=r.total?"paid":p>0?"partial":"due";};
+const daysLeft=()=>Math.max(0,Math.ceil((new Date(CONFIG.fechaCampamento)-new Date())/864e5));
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+
+function seed(){
+  const mk=(name,age,role,church,al,ph,em,sz,pays,cabin)=>{const t=tierFor(age);
+    return{id:crypto.randomUUID(),code:genCode(),name,age,role,church,allergies:al,phone:ph,email:em,size:sz,tier:t.id,total:t.price,checkin:false,note:"",cabin:cabin||"",payments:pays};};
+  const tp=(a,bank)=>({amount:a,method:"Transferencia — "+bank,kind:"transfer",ref:"REF"+Math.floor(Math.random()*9e6),created_at:"2026-05-20"});
+  const cp=(a)=>({amount:a,method:"Efectivo",kind:"cash",ref:"EFE-"+Math.floor(Math.random()*9e4),created_at:"2026-05-22"});
+  return[
+    mk("Darianny Pérez",9,"camper","TCCD — Casa de Dios (Baní)","Ninguna","8295551001","","Niño L",[tp(2500,"Banreservas")],"Cabaña 3 · Hembras A"),
+    mk("Génesis Mateo",24,"leader","TCCD — Casa de Dios (Baní)","Penicilina","8095551002","genesis@correo.do","M",[tp(2000,"Banco Popular"),cp(2500)],"Cabaña 3 · Hembras A"),
+    mk("Reyfis Santana",16,"camper","TCCD — Casa de Dios (Baní)","Maní","8495551003","","L",[cp(1000)],"Cabaña 1 · Varones A"),
+    mk("Ana Liz Reyes",30,"leader","TCCD — Casa de Dios (Baní)","Ninguna","8095551004","","S",[],""),
+    mk("Isaura Gómez",7,"camper","Invitado / Otra iglesia","Lactosa","8295551005","","Niño M",[],""),
+    mk("Paula Rosario",13,"camper","TCCD — Casa de Dios (Baní)","Ninguna","8095551006","","M",[tp(4500,"Banco BHD")],"Cabaña 4 · Hembras B"),
+    mk("Junior Franco",19,"camper","TCCD — Casa de Dios (Baní)","Ninguna","8095551007","","XL",[cp(500)],"Cabaña 1 · Varones A"),
+  ];
+}
+function seedReports(regs){
+  return[
+    {id:crypto.randomUUID(),registration:regs[3].id,name:regs[3].name,code:regs[3].code,bank:"Banreservas",amount:1500,ref:"045789123",date:"2026-06-04",shot:null,status:"pending",created_at:"2026-06-04"},
+    {id:crypto.randomUUID(),registration:regs[2].id,name:regs[2].name,code:regs[2].code,bank:"Banco Popular",amount:1000,ref:"",date:"2026-06-05",shot:demoShot(),status:"pending",created_at:"2026-06-05"},
+  ];
+}
+function demoShot(){
+  const c=document.createElement("canvas");c.width=300;c.height=300;const x=c.getContext("2d");
+  x.fillStyle="#f5f5f4";x.fillRect(0,0,300,300);x.fillStyle="#0a0a0a";x.fillRect(0,0,300,56);
+  x.fillStyle="#fff";x.font="bold 16px sans-serif";x.fillText("Banco Popular",18,34);
+  x.fillStyle="#0a0a0a";x.font="bold 13px sans-serif";x.fillText("Transferencia exitosa",18,90);
+  x.font="28px sans-serif";x.fillText("RD$ 1,000.00",18,135);
+  x.font="12px sans-serif";x.fillStyle="#6a6a6a";
+  x.fillText("Ref: 991122334",18,170);x.fillText("A: Templo C. Casa de Dios",18,192);x.fillText("05/06/2026 - 7:42 PM",18,214);
+  return c.toDataURL("image/png");
+}
+function useCountUp(t,on){const[v,s]=useState(0);useEffect(()=>{if(!on)return;const dur=1000,t0=performance.now();const k=(ts)=>{const p=Math.min(1,(ts-t0)/dur);s(Math.round(t*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(k)};requestAnimationFrame(k);},[t,on]);return v;}
+function useCountdown(){const calc=()=>{const diff=new Date(CONFIG.fechaCampamento)-new Date();if(diff<=0)return null;return{d:Math.floor(diff/864e5),h:Math.floor(diff/36e5)%24,m:Math.floor(diff/6e4)%60,s:Math.floor(diff/1e3)%60};};const[t,setT]=useState(calc);useEffect(()=>{const i=setInterval(()=>setT(calc()),1000);return()=>clearInterval(i);},[]);return t;}
+function confettiBurst(){const c=document.createElement("div");c.className="confetti";for(let i=0;i<60;i++){const p=document.createElement("i");p.style.left=Math.random()*100+"vw";p.style.animationDuration=(1.6+Math.random()*1.4)+"s";p.style.animationDelay=Math.random()*.3+"s";if(i%3===0){p.style.background="transparent";p.style.border="1.5px solid #0a0a0a";}c.appendChild(p);}document.body.appendChild(c);setTimeout(()=>c.remove(),3200);}
+/* ===== Impresión / PDF con logo ===== */
+/* esc(): escapa HTML para impedir XSS al construir los PDF con datos del usuario */
+const esc=(s)=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function printDoc(contentHTML,docTitle){
+  const today=new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'});
+  const T=esc(docTitle);
+  const logo='<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 21 12 4l8.5 17"/><path d="m12 13 4.5 8"/><path d="M12 13 7.5 21"/><path d="M2 21h20"/></svg>';
+  const html='<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>'+T+'</title><style>'
+    +'*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +'body{font-family:Arial,Helvetica,sans-serif;color:#0c1430;padding:0 2px}'
+    +'.ph{display:flex;align-items:center;gap:14px;border-bottom:3px solid #14245a;padding-bottom:14px}'
+    +'.ph .mk{width:52px;height:52px;border-radius:7px;background:#14245a;display:flex;align-items:center;justify-content:center;flex:0 0 auto}'
+    +'.ph h1{font-size:20px;letter-spacing:-.4px;line-height:1.1}'
+    +'.ph .sub{font-size:12px;color:#6a7390;margin-top:2px}'
+    +'.ph .rt{margin-left:auto;text-align:right;font-size:11px;color:#6a7390}'
+    +'.meta{display:flex;gap:20px;font-size:11px;color:#445;margin:12px 0 16px}'
+    +'.meta b{color:#14245a;font-size:13px}'
+    +'h2.sec{font-size:13px;margin:18px 0 8px;color:#14245a;border-left:4px solid #2f63e8;padding-left:9px;text-transform:uppercase;letter-spacing:.5px}'
+    +'table{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:6px}'
+    +'thead{display:table-header-group}tr{page-break-inside:avoid}'
+    +'th{background:#14245a;color:#fff;text-align:left;padding:6px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.4px}'
+    +'td{padding:5px 8px;border-bottom:1px solid #dfe3ee}'
+    +'tbody tr:nth-child(even) td{background:#f4f6fb}'
+    +'.paid{color:#1d7a44;font-weight:bold}.due{color:#c0392b;font-weight:bold}.part{color:#b8791b;font-weight:bold}'
+    +'.sign{width:120px}.muted{color:#99a}'
+    +'.ft{margin-top:18px;font-size:10px;color:#889;border-top:1px solid #dfe3ee;padding-top:8px;text-align:center}'
+    +'@page{size:A4;margin:12mm}'
+    +'</style></head><body>'
+    +'<div class="ph"><div class="mk">'+logo+'</div><div><h1>'+esc(CONFIG.campamento)+'</h1>'
+    +'<div class="sub">'+esc(CONFIG.iglesias[0])+'</div></div><div class="rt">'+T+'<br>Generado: '+today+'</div></div>'
+    +contentHTML
+    +'<div class="ft">'+esc(CONFIG.campamento)+' · '+esc(CONFIG.iglesia)+' — documento generado el '+today+'</div>'
+    +'</body></html>';
+  const f=document.createElement('iframe');
+  f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0';
+  document.body.appendChild(f);
+  const d=f.contentWindow.document;d.open();d.write(html);d.close();
+  setTimeout(()=>{try{f.contentWindow.focus();f.contentWindow.print();}catch(e){}setTimeout(()=>{f.remove();},1500);},450);
+}
+const rolLbl=(r)=>r==='leader'?'Líder':'Campista';
+function pdfList(list){
+  const stt=(st)=>st==='paid'?'<span class="paid">Pagado</span>':st==='partial'?'<span class="part">Parcial</span>':'<span class="due">Pendiente</span>';
+  const rows=list.map((r,i)=>{const pd=paidOf(r),bal=r.total-pd;
+    return '<tr><td>'+(i+1)+'</td><td>'+esc(r.code)+'</td><td>'+esc(r.name)+'</td><td>'+Number(r.age)+'</td><td>'+rolLbl(r.role)+'</td><td>'+(r.cabin?esc(r.cabin):'<span class=muted>—</span>')+'</td><td>'+esc(r.size||'—')+'</td><td>'+money(pd)+'</td><td>'+money(bal)+'</td><td>'+stt(statusOf(r))+'</td><td>'+(r.checkin?'Sí':'')+'</td></tr>';}).join('');
+  const rec=list.reduce((s,r)=>s+paidOf(r),0),meta=list.reduce((s,r)=>s+r.total,0);
+  const content='<div class="meta"><span><b>'+list.length+'</b> inscritos</span><span>Recaudado <b>'+money(rec)+'</b></span><span>Pendiente <b>'+money(meta-rec)+'</b></span></div>'
+    +'<table><thead><tr><th>#</th><th>Código</th><th>Nombre</th><th>Edad</th><th>Rol</th><th>Cabaña</th><th>Talla</th><th>Abonado</th><th>Pendiente</th><th>Estado</th><th>Check</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  printDoc(content,'Lista de inscritos');
+}
+function cabinSection(title,members,cap){
+  const body=members.length?members.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+Number(r.age)+'</td><td>'+rolLbl(r.role)+'</td><td>'+esc(r.size||'—')+'</td><td>'+(r.allergies&&r.allergies!=='Ninguna'?esc(r.allergies):'<span class=muted>—</span>')+'</td><td>'+(r.checkin?'Sí':'')+'</td><td class="sign"></td></tr>').join('')
+    :'<tr><td colspan="8" style="text-align:center;color:#99a;padding:10px">Sin integrantes</td></tr>';
+  return '<h2 class="sec">'+esc(title)+' — '+members.length+(cap?' / '+cap:'')+'</h2>'
+    +'<table><thead><tr><th>#</th><th>Nombre</th><th>Edad</th><th>Rol</th><th>Talla</th><th>Alergias</th><th>Check</th><th class="sign">Firma</th></tr></thead><tbody>'+body+'</tbody></table>';
+}
+function pdfCabin(cabin,registrants){
+  printDoc(cabinSection(cabin.nombre,registrants.filter(r=>r.cabin===cabin.nombre),cabin.cap),'Cabaña — '+cabin.nombre);
+}
+function pdfCabins(registrants){
+  let content=CONFIG.cabanas.map(c=>cabinSection(c.nombre,registrants.filter(r=>r.cabin===c.nombre),c.cap)).join('');
+  const sin=registrants.filter(r=>!r.cabin||!CONFIG.cabanas.some(c=>c.nombre===r.cabin));
+  if(sin.length)content+=cabinSection('Sin cabaña asignada',sin,0);
+  printDoc(content,'Asignación de cabañas');
+}
+function Reveal({children,delay=0}){const ref=useRef(),[v,setV]=useState(false);
+  useEffect(()=>{const o=new IntersectionObserver(([e])=>{if(e.isIntersecting){setV(true);o.disconnect();}},{threshold:.1});if(ref.current)o.observe(ref.current);return()=>o.disconnect();},[]);
+  return<div ref={ref} className={"reveal "+(v?"in":"")} style={{transitionDelay:delay+"ms"}}>{children}</div>;}
+function Magnetic({children,className,...rest}){const ref=useRef();
+  const mv=(e)=>{const el=ref.current,r=el.getBoundingClientRect();el.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.2}px,${(e.clientY-r.top-r.height/2)*.35}px)`;};
+  const lv=()=>{ref.current.style.transform="translate(0,0)";};
+  return<button ref={ref} className={className} onMouseMove={mv} onMouseLeave={lv} {...rest}>{children}</button>;}
+
+/* ===== Capas de BOOM visual ===== */
+function Splash(){
+  const[on,setOn]=useState(true),[off,setOff]=useState(false);
+  useEffect(()=>{const t1=setTimeout(()=>setOff(true),1450);const t2=setTimeout(()=>setOn(false),2150);return()=>{clearTimeout(t1);clearTimeout(t2);};},[]);
+  if(!on)return null;
+  return(<div className={"splash"+(off?" off":"")}>
+    <div><div className="sp-l"><span>Campamento</span></div><div className="sp-l"><span>TCCD — 2026</span></div></div>
+  </div>);
+}
+function WaveField(){
+  const ref=useRef();
+  useEffect(()=>{
+    const cv=ref.current;if(!cv)return;const ctx=cv.getContext('2d');let raf,t=0,my=.5;
+    const fit=()=>{cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;};fit();
+    const onm=e=>{const r=cv.getBoundingClientRect();my=(e.clientY-r.top)/r.height;};
+    addEventListener('resize',fit);addEventListener('mousemove',onm);
+    const draw=()=>{const w=cv.width,h=cv.height;ctx.clearRect(0,0,w,h);const lines=18;
+      for(let l=0;l<lines;l++){const yb=h*(l/(lines-1));ctx.beginPath();
+        const near=1-Math.min(1,Math.abs(my-(l/lines))*2.2);const amp=8+l*1.1+near*30;
+        for(let x=0;x<=w;x+=9){const y=yb+Math.sin(x*0.011+t+l*0.45)*amp*0.42+Math.cos(x*0.005-t*0.7)*amp*0.3;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+        ctx.strokeStyle=`rgba(${90+near*60},${130+near*40},255,${0.10+l*0.006+near*0.30})`;ctx.lineWidth=near>0.6?1.5:1;
+        ctx.shadowColor='rgba(58,109,255,0.5)';ctx.shadowBlur=near*10;ctx.stroke();ctx.shadowBlur=0;}
+      t+=0.013;raf=requestAnimationFrame(draw);};
+    draw();
+    return()=>{cancelAnimationFrame(raf);removeEventListener('resize',fit);removeEventListener('mousemove',onm);};
+  },[]);
+  return<canvas ref={ref} className="wavefield"/>;
+}
+function Scramble({text,delay=0,className}){
+  const[out,setOut]=useState("");
+  useEffect(()=>{const ch="ABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789/#—·";
+    const rnd=()=>text.split("").map(c=>c===" "?" ":ch[Math.floor(Math.random()*ch.length)]).join("");
+    let raf,frame=0;const t0=performance.now();setOut(rnd());
+    const tick=(now)=>{
+      if(now-t0<delay){setOut(rnd());raf=requestAnimationFrame(tick);return;}
+      frame++;const reveal=Math.floor(frame/2);let s="";
+      for(let i=0;i<text.length;i++)s+= text[i]===" "?" ":i<reveal?text[i]:ch[Math.floor(Math.random()*ch.length)];
+      setOut(s);if(reveal<text.length)raf=requestAnimationFrame(tick);else setOut(text);};
+    raf=requestAnimationFrame(tick);return()=>cancelAnimationFrame(raf);
+  },[text,delay]);
+  return<span className={className}>{out}</span>;
+}
+function FlapDigit({ch}){return<span className="flap"><span className="flap-in" key={ch}>{ch}</span></span>;}
+function FlapNum({n,pad=2}){return<span className="flaprow">{String(n).padStart(pad,'0').split('').map((c,i)=><FlapDigit key={i} ch={c}/>)}</span>;}
+function FlapClock({cd}){
+  if(!cd)return<div className="cupo-num">¡Es hoy!</div>;
+  return(<div className="flapwrap">
+    <div className="flapunit"><FlapNum n={cd.d} pad={cd.d>99?3:2}/><div className="flaplbl">Días</div></div>
+    <div className="flapunit"><FlapNum n={cd.h}/><div className="flaplbl">Horas</div></div>
+    <div className="flapunit"><FlapNum n={cd.m}/><div className="flaplbl">Min</div></div>
+    <div className="flapunit"><FlapNum n={cd.s}/><div className="flaplbl">Seg</div></div>
+  </div>);
+}
+function ScrollFX(){
+  useEffect(()=>{
+    const bar=document.getElementById('sprog'),yr=document.getElementById('yearbig');
+    let last=window.scrollY,skew=0,raf;
+    const on=()=>{const h=document.documentElement;const p=h.scrollTop/((h.scrollHeight-h.clientHeight)||1);
+      if(bar)bar.style.transform=`scaleX(${p})`;
+      if(yr)yr.style.transform=`translateY(${h.scrollTop*-0.14}px)`;
+      skew=Math.max(-7,Math.min(7,(window.scrollY-last)*0.22));last=window.scrollY;};
+    addEventListener('scroll',on,{passive:true});on();
+    const loop=()=>{skew*=0.9;document.documentElement.style.setProperty('--vskew',skew.toFixed(2)+'deg');raf=requestAnimationFrame(loop);};
+    raf=requestAnimationFrame(loop);
+    return()=>{removeEventListener('scroll',on);cancelAnimationFrame(raf);};
+  },[]);
+  return<div id="sprog" className="sprog"/>;
+}
+function RotSeal({onClick}){
+  return(<div className="rot" onClick={onClick} title="Inscríbete">
+    <svg viewBox="0 0 128 128" width="128" height="128">
+      <defs><path id="circ" d="M64,64 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
+      <text><textPath href="#circ">INSCRÍBETE YA · CAMPAMENTO 2026 · TCCD ·</textPath></text>
+    </svg>
+    <div className="rot-c"><I n="arrowur" s={26}/></div>
+  </div>);
+}
+
+/* ==================== APP ==================== */
+function App(){
+  const[view,setView]=useState("home");
+  const[session,setSession]=useState(null);
+  const[registrants,setRegistrants]=useState(()=>IS_PROD?[]:seed());
+  const[reports,setReports]=useState([]);
+  const[loading,setLoading]=useState(false);
+  const[toast,setToast]=useState(null);
+  const[reportTarget,setReportTarget]=useState(null);
+  const[cashTarget,setCashTarget]=useState(null);
+  const[detail,setDetail]=useState(null);
+  const[justReg,setJustReg]=useState(null);
+  const notify=(m)=>{setToast(m);setTimeout(()=>setToast(null),2800);};
+  useEffect(()=>{if(!IS_PROD)setReports(seedReports(registrants));},[]);
+
+  const loadAll=async()=>{
+    if(!IS_PROD)return;setLoading(true);
+    const[{data:regs},{data:reps}]=await Promise.all([
+      sb.from('registrations').select('*, payments(id,amount,method,kind,ref,created_at)').order('created_at',{ascending:false}),
+      sb.from('transfer_reports').select('*').eq('status','pending').order('created_at',{ascending:true}),
+    ]);
+    setLoading(false);
+    if(regs)setRegistrants(regs.map(r=>({...r,payments:r.payments||[]})));
+    if(reps)setReports(reps);
+  };
+  useEffect(()=>{if(IS_PROD)sb.auth.getSession().then(({data:{session:s}})=>{if(s)setSession(s.user);});},[]);
+  useEffect(()=>{if(session)loadAll();},[session]);
+  const go=(v)=>{if(v==='admin'&&!session){setView('login');return;}setView(v);window.scrollTo({top:0,behavior:'smooth'});};
+
+  const addRegistrant=async(fd)=>{
+    const t=tierFor(Number(fd.age));
+    const payload={code:genCode(),...fd,age:Number(fd.age),tier:t.id,total:t.price};
+    if(IS_PROD){setLoading(true);const{data:ins,error}=await sb.from('registrations').insert([payload]).select().single();setLoading(false);
+      if(error){notify('Error: '+error.message);return;}setJustReg({...ins,payments:[]});store.set('tccd_code',ins.code);}
+    else{const d={id:crypto.randomUUID(),...payload,payments:[]};setRegistrants(p=>[d,...p]);setJustReg(d);store.set('tccd_code',d.code);}
+    confettiBurst();
+  };
+  const addReport=async(rep)=>{
+    if(IS_PROD){
+      setLoading(true);let shotPath=null;
+      if(rep.shotFile){const path=`${Date.now()}_${rep.shotFile.name.replace(/[^a-zA-Z0-9_.-]/g,'')}`;
+        const{error:upErr}=await sb.storage.from('vouchers').upload(path,rep.shotFile);if(!upErr)shotPath=path;}
+      const{error}=await sb.from('transfer_reports').insert({registration:rep.registration,bank:rep.bank,amount:rep.amount,ref:rep.ref,date:rep.date,shot:shotPath,status:'pending'});
+      setLoading(false);if(error){notify('Error: '+error.message);return false;}
+    }else setReports(p=>[...p,{...rep,id:crypto.randomUUID(),status:'pending',created_at:new Date().toISOString().slice(0,10)}]);
+    confettiBurst();return true;
+  };
+  const approveReport=async(rep)=>{
+    if(IS_PROD){setLoading(true);
+      const{error:e1}=await sb.from('payments').insert({registration:rep.registration,amount:rep.amount,method:'Transferencia — '+rep.bank,kind:'transfer',ref:rep.ref||('VERIF-'+Date.now())});
+      if(!e1)await sb.from('transfer_reports').update({status:'approved'}).eq('id',rep.id);
+      setLoading(false);if(e1){notify('Error: '+e1.message);return;}await loadAll();}
+    else{setRegistrants(prev=>prev.map(r=>r.id===rep.registration?{...r,payments:[...r.payments,{amount:rep.amount,method:'Transferencia — '+rep.bank,kind:'transfer',ref:rep.ref||'VERIF',created_at:new Date().toISOString().slice(0,10)}]}:r));
+      setReports(p=>p.filter(x=>x.id!==rep.id));}
+    confettiBurst();notify('Transferencia aprobada');
+  };
+  const rejectReport=async(rep,reason)=>{
+    if(IS_PROD){setLoading(true);await sb.from('transfer_reports').update({status:'rejected',reject_reason:reason||''}).eq('id',rep.id);setLoading(false);await loadAll();}
+    else setReports(p=>p.filter(x=>x.id!==rep.id));
+    notify('Reporte rechazado');
+  };
+  const addCash=async(id,amount,method)=>{
+    const kind=method==='Efectivo'?'cash':'transfer';
+    if(IS_PROD){setLoading(true);const{error}=await sb.from('payments').insert({registration:id,amount,method,kind,ref:'MANUAL-'+Date.now()});setLoading(false);
+      if(error){notify('Error: '+error.message);return;}await loadAll();}
+    else setRegistrants(prev=>prev.map(r=>r.id===id?{...r,payments:[...r.payments,{amount,method,kind,ref:'MANUAL-'+Math.random().toString(36).slice(2,6).toUpperCase(),created_at:new Date().toISOString().slice(0,10)}]}:r));
+    confettiBurst();notify('Pago registrado');
+  };
+  const toggleCheckin=async(id,val)=>{
+    if(IS_PROD){setLoading(true);const{error}=await sb.from('registrations').update({checkin:val}).eq('id',id);setLoading(false);
+      if(error){notify('Error: '+error.message);return;}await loadAll();}
+    else setRegistrants(prev=>prev.map(r=>r.id===id?{...r,checkin:val}:r));
+    setDetail(d=>d&&d.id===id?{...d,checkin:val}:d);
+    notify(val?'Check-in registrado':'Check-in retirado');
+  };
+  const updateNote=async(id,note)=>{
+    if(IS_PROD){setLoading(true);const{error}=await sb.from('registrations').update({note}).eq('id',id);setLoading(false);
+      if(error){notify('Error: '+error.message);return;}await loadAll();}
+    else setRegistrants(prev=>prev.map(r=>r.id===id?{...r,note}:r));
+    setDetail(d=>d&&d.id===id?{...d,note}:d);
+    notify('Nota guardada');
+  };
+  const assignCabin=async(id,cabin)=>{
+    if(IS_PROD){setLoading(true);const{error}=await sb.from('registrations').update({cabin}).eq('id',id);setLoading(false);
+      if(error){notify('Error: '+error.message);return;}await loadAll();}
+    else setRegistrants(prev=>prev.map(r=>r.id===id?{...r,cabin}:r));
+    setDetail(d=>d&&d.id===id?{...d,cabin}:d);
+    notify(cabin?'Asignado a '+cabin:'Cabaña retirada');
+  };
+  const logout=async()=>{if(IS_PROD)await sb.auth.signOut();setSession(null);setView('home');notify('Sesión cerrada');};
+
+  return(<div className="wrap">
+    <Splash/><ScrollFX/>
+    {!IS_PROD&&<div className="demo-bar">Modo demo — completa SUPABASE_URL y SUPABASE_KEY para conectar</div>}
+    {loading&&<div className="loading-bar"/>}
+    <Nav view={view} go={go} session={session} logout={logout}/>
+    {view==='home'&&<Home go={go} registrants={registrants}/>}
+    {view==='register'&&(justReg?<RegisteredOK r={justReg} onReport={()=>setReportTarget(justReg)} onPortal={()=>{setJustReg(null);go('balance');}} again={()=>setJustReg(null)}/>:<Register onSubmit={addRegistrant} loading={loading}/>)}
+    {view==='balance'&&<MiPortal registrants={registrants} reports={reports} onReport={setReportTarget}/>}
+    {view==='login'&&<Login onLogin={(s)=>{setSession(s);setView('admin');notify('Bienvenido');}}/>}
+    {view==='admin'&&session&&<Admin registrants={registrants} reports={reports} loading={loading} onCash={setCashTarget} onRefresh={loadAll} onRow={setDetail} onCheckin={toggleCheckin} onCabin={assignCabin} approve={approveReport} reject={rejectReport} notify={notify}/>}
+    {reportTarget&&<ReportModal r={reportTarget} onClose={()=>setReportTarget(null)} onSubmit={async(rep)=>{const ok=await addReport(rep);if(ok)notify('Reporte enviado · en verificación');return ok;}}/>}
+    {cashTarget&&<CashModal r={cashTarget} onClose={()=>setCashTarget(null)} onPay={(a,m)=>{addCash(cashTarget.id,a,m);setCashTarget(null);}}/>}
+    {detail&&<DetailModal r={detail} onClose={()=>setDetail(null)} onCash={()=>{setCashTarget(detail);setDetail(null);}} onCheckin={toggleCheckin} onNote={updateNote} onCabin={assignCabin}/>}
+    {toast&&<div className="toast">{toast}</div>}
+    <footer>
+      <div className="f-big">Nos vemos en el<br/><span className="o">campamento</span></div>
+      <div className="f-meta">
+        <span>{CONFIG.campamento}</span>
+        <span>{IS_PROD?"Conectado · Supabase":"Demo"} · Transferencias + Efectivo</span>
+        <span>{CONFIG.iglesia} — Baní, RD</span>
+      </div>
+    </footer>
+  </div>);
+}
+
+function Nav({view,go,session,logout}){
+  const links=[["home","Inicio"],["register","Inscripción"],["balance","Mi portal"],["admin","Admin"]];
+  return(<nav>
+    <div className="logo" onClick={()=>go('home')}><div className="mark"><I n="tent" s={20}/></div><span>CAMPAMENTO {CONFIG.iglesia}</span></div>
+    <div className="navlinks">{links.map(([k,l])=><button key={k} className={view===k||(k==='admin'&&view==='login')?"on":""} onClick={()=>go(k)}>{l}</button>)}</div>
+    {session&&<button className="btn btn-ghost btn-sm" onClick={logout}><span><I n="out" s={14}/> Salir</span></button>}
+  </nav>);
+}
+
+function Home({go,registrants}){
+  const cd=useCountdown();
+  const cupo=registrants.length;const pct=Math.min(100,Math.round(cupo/CONFIG.cupoMax*100));
+  const[w,setW]=useState(0);useEffect(()=>{const t=setTimeout(()=>setW(pct),300);return()=>clearTimeout(t);},[pct]);
+  return(<div>
+    <section className="hero">
+      <WaveField/>
+      <RotSeal onClick={()=>go('register')}/>
+      <div className="tag"><span className="ln"></span><span className="dot"></span> Inscripciones abiertas</div>
+      <h1>
+        <Scramble text="Nos vamos" delay={1650} className="hl2"/>
+        <Scramble text="al camp—" delay={1800} className="hl2 out"/>
+        <Scramble text="amento." delay={1950} className="hl2"/>
+      </h1>
+      <div className="hero-foot">
+        <p>Regístrate en un minuto, abona por transferencia o en efectivo, y consulta tu saldo cuando quieras.</p>
+        <div className="cta-row">
+          <Magnetic className="btn btn-pri" onClick={()=>go('register')}><span>Inscribirme ahora <I n="arrowr" s={16}/></span></Magnetic>
+          <Magnetic className="btn btn-ghost" onClick={()=>go('balance')}><span>Mi portal</span></Magnetic>
+        </div>
+      </div>
+      <div className="year-big" id="yearbig">2026</div>
+    </section>
+    <div className="marquee"><div className="marquee-track">
+      {[0,1].map(k=><span key={k}>Campamento 2026 <span className="o">—</span> TCCD <span className="o">—</span> Inscríbete ya <span className="o">—</span> Casa de Dios <span className="o">—</span> </span>)}
+    </div></div>
+    <Reveal><div className="band">
+      <div className="left">
+        <div className="lbl">Faltan para el campamento</div>
+        <FlapClock cd={cd}/>
+      </div>
+      <div>
+        <div className="lbl">Cupos ocupados</div>
+        <div className="cupo-num">{cupo}<small> / {CONFIG.cupoMax}</small></div>
+        <div className="cupobar"><i style={{width:w+"%"}}></i></div>
+      </div>
+    </div></Reveal>
+    <Reveal><div className="sec-head"><span className="idx">(01)</span><h2>¿Qué quieres hacer?</h2></div></Reveal>
+    <Reveal delay={80}><div className="tiles">
+      <div className="tile" onClick={()=>go('register')}>
+        <div className="tico"><I n="pen" s={22}/></div>
+        <h3>Inscríbete</h3><p>Tus datos y talla. El sistema te clasifica solo como campista o leader.</p>
+        <span className="go"><I n="arrowur" s={20}/></span><span className="tnum">01</span></div>
+      <div className="tile" onClick={()=>go('balance')}>
+        <div className="tico"><I n="bank" s={22}/></div>
+        <h3>Abona y reporta</h3><p>Transfiere desde tu banco (desde {money(CONFIG.abonoMin)}) y reporta aquí tu comprobante.</p>
+        <span className="go"><I n="arrowur" s={20}/></span><span className="tnum">02</span></div>
+      <div className="tile" onClick={()=>go('admin')}>
+        <div className="tico"><I n="shield" s={22}/></div>
+        <h3>Panel del equipo</h3><p>Verificación de transferencias, efectivo, alertas de cobro y exportación.</p>
+        <span className="go"><I n="arrowur" s={20}/></span><span className="tnum">03</span></div>
+    </div></Reveal>
+  </div>);
+}
+
+function Register({onSubmit,loading}){
+  const[f,setF]=useState({name:"",age:"",role:"camper",church:CONFIG.iglesias[0],allergies:"",phone:"",email:"",size:""});
+  const set=(k,v)=>setF(p=>({...p,[k]:v}));
+  const ageNum=Number(f.age);const tier=f.age!==""?tierFor(ageNum):null;
+  const phoneOk=f.phone.replace(/\D/g,"").length>=10;
+  const valid=f.name.trim()&&f.age!==""&&ageNum>=0&&ageNum<120&&phoneOk&&f.size;
+  return(<Reveal><div className="panel">
+    <h2>Inscripción</h2><p className="lead">Completa tus datos. La tarifa se calcula sola según tu edad.</p>
+    <div className="field"><label>Nombre completo <span className="req">*</span></label><input value={f.name} onChange={e=>set('name',e.target.value)} placeholder="Ej. Darianny Pérez"/></div>
+    <div className="row2">
+      <div className="field"><label>Edad <span className="req">*</span></label><input type="number" min="0" max="119" value={f.age} onChange={e=>set('age',e.target.value)} placeholder="Años"/></div>
+      <div className="field"><label>Talla de camiseta <span className="req">*</span></label><select value={f.size} onChange={e=>set('size',e.target.value)}><option value="">Selecciona…</option>{CONFIG.tallas.map(t=><option key={t}>{t}</option>)}</select></div>
+    </div>
+    <div className="row2">
+      <div className="field"><label>WhatsApp <span className="req">*</span></label><input type="tel" value={f.phone} onChange={e=>set('phone',e.target.value)} placeholder="809 555 1234"/></div>
+      <div className="field"><label>Correo (opcional)</label><input type="email" value={f.email} onChange={e=>set('email',e.target.value)} placeholder="tucorreo@correo.com"/></div>
+    </div>
+    <div className="field"><label>Iglesia <span className="req">*</span></label><select value={f.church} onChange={e=>set('church',e.target.value)}>{CONFIG.iglesias.map(i=><option key={i}>{i}</option>)}</select></div>
+    <div className="field"><label>¿Campista o leader? <span className="req">*</span></label>
+      <div className="seg">
+        <div className={"opt"+(f.role==="camper"?" sel":"")} onClick={()=>set('role','camper')}><div className="t"><I n="user" s={16}/> Campista</div><div className="d">Participante</div></div>
+        <div className={"opt"+(f.role==="leader"?" sel":"")} onClick={()=>set('role','leader')}><div className="t"><I n="users" s={16}/> Líder</div><div className="d">Líder / staff</div></div>
+      </div></div>
+    <div className="field"><label>Alergias (opcional)</label><textarea rows="2" value={f.allergies} onChange={e=>set('allergies',e.target.value)} placeholder="Alimentos, medicamentos... o 'Ninguna'"/></div>
+    {tier&&<div className={"tierbox "+tier.cls}><span>●</span> Tarifa · {tier.label}<span className="amt">{money(tier.price)}</span></div>}
+    <Magnetic className="btn btn-pri" style={{width:"100%"}} disabled={!valid||loading} onClick={()=>onSubmit({...f,allergies:f.allergies.trim()||"Ninguna",email:f.email.trim()})}><span>{loading?"Guardando…":"Confirmar inscripción"} <I n="arrowr" s={16}/></span></Magnetic>
+    {!phoneOk&&f.phone&&<p className="hint" style={{color:"var(--warn)"}}>WhatsApp: mínimo 10 dígitos.</p>}
+  </div></Reveal>);
+}
+
+function RegisteredOK({r,onReport,onPortal,again}){
+  return(<div className="panel">
+    <div className="success"><div className="check"><svg viewBox="0 0 52 52"><path d="M14 27l8 8 16-16"/></svg></div>
+      <h2>¡Listo, {r.name.split(" ")[0]}!</h2><p className="lead">Inscrito/a con talla {r.size}. Este es tu código — guárdalo, pero tranquilo: si lo pierdes, lo recuperas con tu WhatsApp en "Mi portal".</p></div>
+    <div className="codebox"><div className="lbl">Tu código</div><div className="code">{r.code}</div></div>
+    <BankList compact/>
+    <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:14}}>
+      <button className="btn btn-pri" style={{flex:1}} onClick={onReport}><span>Ya transferí · reportar</span></button>
+      <button className="btn btn-ghost" onClick={again}><span>Otra persona</span></button>
+    </div>
+    <button className="btn btn-ghost btn-sm" style={{width:"100%",marginTop:10}} onClick={onPortal}><span>Ir a mi portal <I n="arrowr" s={14}/></span></button>
+  </div>);
+}
+
+function BankList({compact}){
+  const[copied,setCopied]=useState(null);
+  const copy=(n,i)=>{navigator.clipboard?.writeText(n).then(()=>{setCopied(i);setTimeout(()=>setCopied(null),1600);});};
+  return(<div style={{marginTop:compact?6:0}}>
+    <label style={{marginBottom:12}}>Cuentas para transferir</label>
+    {CONFIG.cuentas.map((c,i)=>(<div className="bankcard" key={i}>
+      <div className="bk">{c.corto}</div>
+      <div className="info">
+        <div className="bname">{c.banco}</div>
+        <div className="bnum">{c.numero}</div>
+        <div className="bmeta">{c.tipo} · {c.titular}</div>
+      </div>
+      <button className={"copybtn"+(copied===i?" ok":"")} onClick={()=>copy(c.numero,i)}>{copied===i?<><I n="check" s={13}/> Copiado</>:<><I n="copy" s={13}/> Copiar</>}</button>
+    </div>))}
+    <p className="hint">Transfiere desde tu app bancaria y luego pulsa <b>"Ya transferí · reportar"</b> con tu referencia o captura.</p>
+  </div>);
+}
+
+function MiPortal({registrants,reports,onReport}){
+  const[mode,setMode]=useState("code");
+  const[input,setInput]=useState("");
+  const[code,setCode]=useState(()=>store.get('tccd_code')||"");
+  const[fetched,setFetched]=useState(null);
+  const[busy,setBusy]=useState(false),[err,setErr]=useState(""),[notFound,setNotFound]=useState(false);
+  const deriveDemo=(c)=>{if(!c)return null;const r=registrants.find(x=>x.code.toLowerCase()===c.toLowerCase());
+    return r?{...r,reports:reports.filter(rp=>rp.registration===r.id)}:null;};
+  const me=IS_PROD?fetched:deriveDemo(code);
+  const remember=(c)=>{setCode(c);store.set('tccd_code',c);};
+  const fetchCode=async(c,silent)=>{setErr("");setNotFound(false);setBusy(!silent);
+    const{data,error}=await sb.rpc('get_registration_by_code',{p_code:c.trim()});setBusy(false);
+    if(error){if(!silent)setErr('Error: '+error.message);return;}
+    if(data){setFetched({...data,payments:data.payments||[],reports:data.reports||[]});remember(data.code);}else if(!silent)setNotFound(true);};
+  const fetchPhone=async(ph)=>{setErr("");setNotFound(false);setBusy(true);
+    const{data,error}=await sb.rpc('get_registration_by_phone',{p_phone:ph});setBusy(false);
+    if(error){setErr('Error: '+error.message);return;}
+    if(data){setFetched({...data,payments:data.payments||[],reports:data.reports||[]});remember(data.code);}else setNotFound(true);};
+  useEffect(()=>{const s=store.get('tccd_code');if(s&&IS_PROD)fetchCode(s,true);},[]);
+  const submit=()=>{setNotFound(false);setErr("");
+    if(mode==="code"){const c=input.trim();if(!c)return;
+      if(IS_PROD)fetchCode(c,false);
+      else{const r=registrants.find(x=>x.code.toLowerCase()===c.toLowerCase());r?remember(r.code):setNotFound(true);}}
+    else{const ph=input.replace(/\D/g,"");if(ph.length<10){setErr("Escribe tu WhatsApp completo (10 dígitos).");return;}
+      if(IS_PROD)fetchPhone(ph);
+      else{const r=registrants.find(x=>(x.phone||"").replace(/\D/g,"").slice(-10)===ph.slice(-10));r?remember(r.code):setNotFound(true);}}};
+  const exit=()=>{store.del('tccd_code');setCode("");setFetched(null);setInput("");setNotFound(false);};
+  if(me)return<Portal me={me} onReport={()=>onReport(me)} onExit={exit}/>;
+  return(<Reveal><div className="panel">
+    <h2>Mi portal</h2><p className="lead">Entra para ver tu inscripción, tus abonos y el estado de tus pagos.</p>
+    <div className="tabs" style={{marginBottom:18}}>
+      <button className={mode==="code"?"on":""} onClick={()=>{setMode("code");setInput("");setNotFound(false);setErr("");}}>Con mi código</button>
+      <button className={mode==="phone"?"on":""} onClick={()=>{setMode("phone");setInput("");setNotFound(false);setErr("");}}>Con mi WhatsApp</button>
+    </div>
+    {mode==="code"?
+      <div className="field"><label>Tu código</label>
+        <input value={input} onChange={e=>setInput(e.target.value)} placeholder="Ej. TCCD-A4F2" onKeyDown={e=>e.key==='Enter'&&submit()} style={{textTransform:"uppercase"}}/>
+        <p className="hint">¿Lo perdiste? Cambia a <b>"Con mi WhatsApp"</b> arriba.</p></div>
+    :
+      <div className="field"><label>Tu número de WhatsApp</label>
+        <input type="tel" value={input} onChange={e=>setInput(e.target.value)} placeholder="809 555 1234" onKeyDown={e=>e.key==='Enter'&&submit()}/>
+        <p className="hint">El mismo que pusiste al inscribirte. Con esto recuperas tu código.</p></div>}
+    {err&&<div className="errbanner">{err}</div>}
+    {notFound&&<div className="errbanner">No encontramos {mode==="code"?"ese código":"ese número"}. Revísalo o prueba el otro método.</div>}
+    <button className="btn btn-pri" style={{width:"100%"}} onClick={submit} disabled={busy||!input.trim()}><span>{busy?"Buscando…":"Entrar a mi portal"} <I n="arrowr" s={16}/></span></button>
+  </div></Reveal>);
+}
+
+function Portal({me,onReport,onExit}){
+  const paid=paidOf(me),bal=me.total-paid;
+  const reps=me.reports||[];
+  const pend=reps.filter(r=>r.status==='pending').reduce((s,r)=>s+r.amount,0);
+  const[w,setW]=useState(0);useEffect(()=>{const t=setTimeout(()=>setW(Math.min(100,paid/me.total*100)),150);return()=>clearTimeout(t);},[paid]);
+  const pendW=Math.min(100-w,pend/me.total*100);
+  const[copied,setCopied]=useState(false);
+  const copyCode=()=>{navigator.clipboard?.writeText(me.code).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1600);});};
+  const cd=useCountdown();
+  return(<Reveal><div style={{maxWidth:680,margin:"30px auto"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:14,marginBottom:22}}>
+      <div>
+        <div style={{fontSize:12,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:"var(--g3)"}}>Mi portal</div>
+        <h2 style={{fontFamily:"'Sora'",fontSize:34,letterSpacing:-1.5,textTransform:"uppercase",lineHeight:1,marginTop:6}}>Hola,<br/>{me.name.split(" ")[0]}</h2>
+      </div>
+      <button className="btn btn-ghost btn-sm" onClick={onExit}><span><I n="out" s={14}/> Salir</span></button>
+    </div>
+    <div style={{border:"1.5px solid var(--ink)",display:"flex",alignItems:"center",gap:14,padding:"14px 18px",marginBottom:18,flexWrap:"wrap"}}>
+      <div style={{flex:1,minWidth:140}}>
+        <div style={{fontSize:10.5,letterSpacing:1.5,textTransform:"uppercase",color:"var(--g2)"}}>Tu código</div>
+        <div style={{fontFamily:"'Sora'",fontSize:24,letterSpacing:3,marginTop:2}}>{me.code}</div>
+      </div>
+      <button className={"copybtn"+(copied?" ok":"")} onClick={copyCode}>{copied?<><I n="check" s={13}/> Copiado</>:<><I n="copy" s={13}/> Copiar código</>}</button>
+    </div>
+    {me.cabin&&<div style={{border:"1.5px solid var(--accent)",background:"var(--accent-deep)",display:"flex",alignItems:"center",gap:14,padding:"16px 18px",marginBottom:18}}>
+      <div style={{width:42,height:42,borderRadius:3,background:"var(--accent)",color:"#fff",display:"grid",placeItems:"center",flexShrink:0}}><I n="tent" s={22}/></div>
+      <div>
+        <div style={{fontSize:10.5,letterSpacing:1.5,textTransform:"uppercase",color:"var(--g2)"}}>Tu cabaña</div>
+        <div style={{fontFamily:"'Sora'",fontWeight:800,fontSize:18,marginTop:2,color:"#fff"}}>{me.cabin}</div>
+      </div>
+    </div>}
+    <div className="balcard">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,position:"relative",zIndex:2}}>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          <span className="badge" style={{borderColor:"#fff",color:"#fff"}}>{me.role==="leader"?"Líder":"Campista"}</span>
+          <span className="badge" style={{borderColor:"#fff",color:"#fff"}}>{TIERS.find(t=>t.id===me.tier)?.label}</span>
+          {me.size&&<span className="badge" style={{borderColor:"#fff",color:"#fff"}}><I n="shirt" s={12}/> {me.size}</span>}
+        </div>
+        {cd&&<div style={{fontSize:12,opacity:.7,display:"flex",alignItems:"center",gap:6}}><I n="clock" s={13}/> Faltan {cd.d} días</div>}
+      </div>
+      <div className="balgrid">
+        <div className="b"><div className="k">Total</div><div className="v">{money(me.total)}</div></div>
+        <div className="b"><div className="k">Abonado</div><div className="v">{money(paid)}</div></div>
+        <div className="b"><div className="k">Pendiente</div><div className="v">{money(bal)}</div></div>
+      </div>
+      <div className="progress"><i style={{width:w+"%"}}></i><i className="pend" style={{left:w+"%",width:pendW+"%"}}></i></div>
+      {pend>0&&<p style={{fontSize:12,marginTop:10,opacity:.75,position:"relative",zIndex:2,display:"flex",alignItems:"center",gap:6}}><I n="clock" s={13}/> {money(pend)} reportado, en verificación por el equipo.</p>}
+      {bal<=0&&<p style={{fontSize:13,marginTop:12,fontWeight:700,position:"relative",zIndex:2}}>Pago completo. ¡Nos vemos en el campamento!</p>}
+    </div>
+    {reps.length>0&&<div style={{marginBottom:18}}>
+      <label style={{marginBottom:10}}>Mis transferencias reportadas</label>
+      {reps.slice().reverse().map((rp,i)=>{
+        const stMap={pending:[<I n="clock" s={12} key="i"/>,"En verificación","out"],approved:[<I n="check" s={12} key="i"/>,"Aprobada","ok"],rejected:[<I n="x" s={12} key="i"/>,"Rechazada","wr"]};
+        const[ic,txt,cls]=stMap[rp.status]||stMap.pending;
+        return(<div key={i} style={{border:"1px solid var(--line)",padding:"13px 16px",marginBottom:8,display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
+          <div style={{flex:1,minWidth:160}}>
+            <b style={{fontFamily:"'Sora'",fontSize:16}}>{money(rp.amount)}</b>
+            <div style={{fontSize:12.5,color:"var(--g2)",marginTop:2}}>{rp.bank} · {(rp.date||rp.created_at||"").slice(0,10)}{rp.ref?" · ref "+rp.ref:""}</div>
+            {rp.status==='rejected'&&rp.reject_reason&&<div style={{fontSize:12.5,color:"var(--warn)",marginTop:4}}>Motivo: {rp.reject_reason}. Puedes reportarla de nuevo.</div>}
+          </div>
+          <span className={"badge "+cls}>{ic} {txt}</span>
+        </div>);})}
+    </div>}
+    {(me.payments||[]).length>0&&<div style={{marginBottom:18}}>
+      <label style={{marginBottom:10}}>Historial de abonos confirmados</label>
+      <div style={{border:"1px solid var(--line)",padding:"4px 18px"}}>
+        {(me.payments||[]).map((p,i)=><div className="histrow" key={i}>
+          <span>{(p.created_at||"").slice(0,10)} · {p.method}</span><b>{money(p.amount)}</b></div>)}
+      </div>
+    </div>}
+    {bal>0&&<>
+      <BankList/>
+      <button className="btn btn-pri" style={{width:"100%",marginTop:14}} onClick={onReport}><span>Ya transferí · reportar comprobante</span></button>
+    </>}
+  </div></Reveal>);
+}
+
+function ReportModal({r,onClose,onSubmit}){
+  const paid=paidOf(r),bal=r.total-paid;
+  const minA=Math.min(CONFIG.abonoMin,bal);
+  const presets=[];for(let v=CONFIG.abonoStep;v<bal;v+=CONFIG.abonoStep)if(v>=minA)presets.push(v);
+  const[step,setStep]=useState(1);
+  const[bank,setBank]=useState(CONFIG.cuentas[0].banco);
+  const[amt,setAmt]=useState(bal),[custom,setCustom]=useState("");
+  const[ref,setRef]=useState(""),[date,setDate]=useState(new Date().toISOString().slice(0,10));
+  const[shot,setShot]=useState(null),[shotFile,setShotFile]=useState(null),[err,setErr]=useState(""),[busy,setBusy]=useState(false);
+  const amtOk=amt>=minA&&amt<=bal;
+  const proofOk=ref.trim().length>=4||shot;
+  const pick=(v)=>{setAmt(v);setCustom("");};
+  const onCustom=(v)=>{const n=v.replace(/\D/g,"");setCustom(n);if(n)setAmt(Number(n));};
+  const onFile=(e)=>{const f=e.target.files[0];if(!f)return;
+    if(f.size>4*1024*1024){setErr("La imagen pesa más de 4MB. Toma una captura más liviana.");return;}
+    setErr("");setShotFile(f);const rd=new FileReader();rd.onload=()=>setShot(rd.result);rd.readAsDataURL(f);};
+  const submit=async()=>{setBusy(true);
+    const ok=await onSubmit({registration:r.id,name:r.name,code:r.code,bank,amount:amt,ref:ref.trim(),date,shot,shotFile});
+    setBusy(false);if(ok)setStep(3);};
+  return(<div className="overlay" onClick={busy?undefined:onClose}><div className="modal" onClick={e=>e.stopPropagation()}>
+    <button className="close" onClick={onClose}>✕</button>
+    <div className="steps"><i className="on"></i><i className={step>=2?"on":""}></i><i className={step>=3?"on":""}></i></div>
+    {step===1&&<>
+      <h3>Paso 1 · ¿Cuánto y dónde?</h3>
+      <p style={{color:"var(--g2)",fontSize:14,marginBottom:18}}>{r.name} · pendiente {money(bal)}</p>
+      <div className="field"><label>Banco al que transferiste</label>
+        <select value={bank} onChange={e=>setBank(e.target.value)}>{CONFIG.cuentas.map(c=><option key={c.banco}>{c.banco}</option>)}</select></div>
+      <label>Monto transferido (desde {money(minA)})</label>
+      <div className="chips" style={{marginTop:9}}>
+        {presets.map(v=><div key={v} className={"chip-opt"+(amt===v&&!custom?" sel":"")} onClick={()=>pick(v)}>{money(v)}</div>)}
+        <div className={"chip-opt full"+(amt===bal&&!custom?" sel":"")} onClick={()=>pick(bal)}>Pago completo · {money(bal)}</div>
+      </div>
+      <div className="field"><label>…u otro monto</label>
+        <input type="number" min={minA} max={bal} value={custom} onChange={e=>onCustom(e.target.value)} placeholder={`Mínimo ${money(minA)}`}/>
+        {custom&&!amtOk&&<p className="hint" style={{color:"var(--warn)"}}>Entre {money(minA)} y {money(bal)}.</p>}</div>
+      <button className="btn btn-pri" style={{width:"100%"}} disabled={!amtOk} onClick={()=>setStep(2)}><span>Continuar <I n="arrowr" s={15}/></span></button>
+    </>}
+    {step===2&&<>
+      <h3>Paso 2 · Tu comprobante</h3>
+      <p style={{color:"var(--g2)",fontSize:14,marginBottom:18}}>Incluye la <b>referencia</b> del banco, la <b>captura</b>, o ambas. Con una basta.</p>
+      {err&&<div className="errbanner">{err}</div>}
+      <div className="row2">
+        <div className="field"><label>No. de referencia</label>
+          <input value={ref} onChange={e=>setRef(e.target.value)} placeholder="Ej. 045789123"/></div>
+        <div className="field"><label>Fecha de la transferencia</label>
+          <input type="date" value={date} onChange={e=>setDate(e.target.value)}/></div>
+      </div>
+      <div className="field"><label>Captura del comprobante (opcional si pusiste referencia)</label>
+        {!shot?<div className="upload"><input type="file" accept="image/*" onChange={onFile}/>
+          <div className="uic"><I n="img" s={26}/></div><div className="t">Toca para subir la captura</div><div className="d">JPG o PNG · máx 4MB</div></div>
+        :<div className="thumb"><img src={shot} alt="comprobante"/><div className="tx">Captura cargada</div>
+          <button onClick={()=>{setShot(null);setShotFile(null);}}>✕</button></div>}
+      </div>
+      {!proofOk&&<p className="hint" style={{color:"var(--warn)",marginBottom:14}}>Necesitamos al menos la referencia (mín. 4 dígitos) o la captura para poder verificar.</p>}
+      <div style={{display:"flex",gap:10}}>
+        <button className="btn btn-ghost" onClick={()=>setStep(1)}><span>Atrás</span></button>
+        <button className="btn btn-pri" style={{flex:1}} disabled={!proofOk||busy} onClick={submit}><span>{busy?"Enviando…":"Enviar reporte de "+money(amt)}</span></button>
+      </div>
+    </>}
+    {step===3&&<>
+      <div className="success"><div className="check"><svg viewBox="0 0 52 52"><path d="M14 27l8 8 16-16"/></svg></div>
+        <h3 style={{textAlign:"center"}}>Reporte enviado</h3>
+        <p style={{color:"var(--g2)",fontSize:14,marginTop:8,textAlign:"center"}}>El equipo verificará tu transferencia de <b>{money(amt)}</b> contra el banco y se sumará a tu abono. Mientras tanto aparecerá como <b>"en verificación"</b> en tu portal.</p></div>
+      <button className="btn btn-pri" style={{width:"100%",marginTop:8}} onClick={onClose}><span>Listo</span></button>
+    </>}
+  </div></div>);
+}
+
+function Login({onLogin}){
+  const[e,setE]=useState(""),[p,setP]=useState(""),[err,setErr]=useState(""),[busy,setBusy]=useState(false);
+  const tryLogin=async()=>{setErr("");setBusy(true);
+    if(IS_PROD){const{data,error}=await sb.auth.signInWithPassword({email:e.trim(),password:p});setBusy(false);
+      if(error){setErr("Credenciales incorrectas.");return;}onLogin(data.user);}
+    else{setBusy(false);const a=DEMO_ADMINS.find(a=>a.email===e.trim()&&a.pass===p);if(a)onLogin({email:a.email});else setErr("Credenciales incorrectas.");}
+  };
+  return(<Reveal><div className="panel" style={{maxWidth:440}}>
+    <h2>Panel del equipo</h2><p className="lead">Acceso para tesorería y líderes.</p>
+    {!IS_PROD&&<div className="secbanner"><I n="shield" s={16}/> <span><b>Demo:</b> login de demostración. La seguridad real se activa con Supabase Auth.</span></div>}
+    {err&&<div className="errbanner">{err}</div>}
+    <div className="field"><label>Correo</label><input value={e} onChange={ev=>{setE(ev.target.value);setErr("");}} placeholder="tucorreo@tccd.do" onKeyDown={ev=>ev.key==='Enter'&&tryLogin()}/></div>
+    <div className="field"><label>Contraseña</label><input type="password" value={p} onChange={ev=>{setP(ev.target.value);setErr("");}} placeholder="••••••••" onKeyDown={ev=>ev.key==='Enter'&&tryLogin()}/></div>
+    <button className="btn btn-pri" style={{width:"100%"}} disabled={busy} onClick={tryLogin}><span>{busy?"Verificando…":"Entrar"}</span></button>
+    {!IS_PROD&&<p className="hint" style={{marginTop:14}}>Demo: <b>jhonfrer@tccd.do</b> / <b>campamento26</b></p>}
+  </div></Reveal>);
+}
+
+function Admin({registrants,reports,loading,onCash,onRefresh,onRow,onCheckin,onCabin,approve,reject,notify}){
+  const[sub,setSub]=useState("resumen");
+  const pending=reports.filter(r=>r.status==='pending');
+  const dl=daysLeft();
+  const debtors=registrants.filter(r=>paidOf(r)<r.total).sort((a,b)=>(b.total-paidOf(b))-(a.total-paidOf(a)));
+  const totalDebt=debtors.reduce((s,r)=>s+(r.total-paidOf(r)),0);
+  const recT=registrants.reduce((s,r)=>s+transferOf(r),0);
+  const recC=registrants.reduce((s,r)=>s+cashOf(r),0);
+  const rec=recT+recC;const meta=registrants.reduce((s,r)=>s+r.total,0);
+  const conAbono=registrants.filter(r=>paidOf(r)>0).length;
+  const presentes=registrants.filter(r=>r.checkin).length;
+  const seen=useRef(true);
+  const nReg=useCountUp(registrants.length,seen.current),nRec=useCountUp(rec,seen.current),nPend=useCountUp(meta-rec,seen.current);
+  const alarma=dl<=CONFIG.alertaDias&&debtors.length>0;
+  return(<div>
+    <div style={{margin:"26px 0 24px"}}><div className="sec-head"><span className="idx">(ADMIN)</span><h2>Panel de control</h2></div>
+      <p className="sec-sub">Verificación de transferencias, efectivo, alertas y exportación.</p></div>
+    {!IS_PROD&&<div className="secbanner"><I n="shield" s={16}/> <span>Modo demo. Datos de prueba, no se guardan.</span></div>}
+    {alarma&&<div className="alertband"><I n="alert" s={24} style={{color:"var(--warn)",flexShrink:0}}/>
+      <div>Faltan <b>{dl} días</b> para el campamento y <b>{debtors.length} persona{debtors.length!==1?"s":""}</b> no ha{debtors.length!==1?"n":""} completado el pago — <b>{money(totalDebt)}</b> por cobrar. Revisa la pestaña <b>Alertas</b>.</div></div>}
+    <div className="stats">
+      <div className="stat"><div className="k">Inscritos</div><div className="v">{nReg}</div><div className="split">{conAbono} con abono</div></div>
+      <div className="stat"><div className="k">Recaudado</div><div className="v sm" style={{color:"var(--ok)"}}>{money(nRec)}</div>
+        <div className="split">Transferencias <b>{money(recT)}</b><br/>Efectivo <b>{money(recC)}</b></div></div>
+      <div className="stat"><div className="k">Pendiente</div><div className="v sm" style={{color:"var(--warn)"}}>{money(nPend)}</div><div className="split">{debtors.length} personas deben</div></div>
+      <div className={"stat"+(pending.length>0?" attn":"")}><div className="k">Por verificar</div><div className="v">{pending.length}</div>
+        <div className="split">{money(pending.reduce((s,p)=>s+p.amount,0))} reportados</div></div>
+    </div>
+    <div className="adminrow">
+      <div className="box">
+        <h4>Recaudación <span>{meta?Math.round(rec/meta*100):0}%</span></h4>
+        <GoalBar t={recT} c={recC} meta={meta}/>
+        <div className="legend"><i>■ Transferencias {money(recT)}</i><i style={{color:"var(--g3)"}}>■ Efectivo {money(recC)}</i><i style={{marginLeft:"auto"}}>meta {money(meta)}</i></div>
+      </div>
+      <div className="box">
+        <h4>Camisetas a pedir <span>{registrants.filter(r=>r.size).length}</span></h4>
+        <TallaGrid registrants={registrants}/>
+      </div>
+    </div>
+    <div className="toolbar">
+      <div className="tabs">
+        <button className={sub==="resumen"?"on":""} onClick={()=>setSub("resumen")}>Resumen</button>
+        <button className={sub==="lista"?"on":""} onClick={()=>setSub("lista")}>Lista</button>
+        <button className={sub==="cabanas"?"on":""} onClick={()=>setSub("cabanas")}>Cabañas</button>
+        <button className={sub==="verificar"?"on":""} onClick={()=>setSub("verificar")}>Verificar{pending.length>0&&<span className="pip">{pending.length}</span>}</button>
+        <button className={sub==="alertas"?"on":""} onClick={()=>setSub("alertas")}>Alertas{alarma&&<span className="pip">{debtors.length}</span>}</button>
+      </div>
+      {IS_PROD&&<button className="btn btn-ghost btn-sm" onClick={onRefresh} disabled={loading}><span><I n="refresh" s={14}/> Actualizar</span></button>}
+    </div>
+    <div className="subfade" key={sub}>
+      {sub==="resumen"&&<ResumenTab registrants={registrants} recT={recT} recC={recC} rec={rec} meta={meta} debtors={debtors} presentes={presentes}/>}
+      {sub==="lista"&&<ListaTab registrants={registrants} onCash={onCash} onRow={onRow} onCheckin={onCheckin} notify={notify}/>}
+      {sub==="cabanas"&&<CabinsTab registrants={registrants} onCabin={onCabin}/>}
+      {sub==="verificar"&&<VerifyTab pending={pending} approve={approve} reject={reject}/>}
+      {sub==="alertas"&&<AlertsTab debtors={debtors} dl={dl}/>}
+    </div>
+  </div>);
+}
+function GoalBar({t,c,meta}){
+  const[wt,setWt]=useState(0),[wc,setWc]=useState(0);
+  useEffect(()=>{const x=setTimeout(()=>{setWt(meta?t/meta*100:0);setWc(meta?c/meta*100:0);},250);return()=>clearTimeout(x);},[t,c,meta]);
+  return(<div className="goalbar"><i className="tr" style={{width:wt+"%"}}></i><i className="ef" style={{left:wt+"%",width:wc+"%"}}></i></div>);
+}
+function TallaGrid({registrants}){
+  const tallas={};CONFIG.tallas.forEach(t=>tallas[t]=0);registrants.forEach(r=>{if(r.size)tallas[r.size]=(tallas[r.size]||0)+1;});
+  return(<div className="tallagrid">{CONFIG.tallas.map(t=><div className="tallabox" key={t}><b>{tallas[t]||0}</b><i>{t}</i></div>)}</div>);
+}
+function Ring({pct,size=132,sw=13}){
+  const r=(size-sw)/2,c=2*Math.PI*r;const[off,setOff]=useState(c);
+  const shown=useCountUp(Math.round(pct),true);
+  useEffect(()=>{const x=setTimeout(()=>setOff(c*(1-Math.min(100,pct)/100)),250);return()=>clearTimeout(x);},[pct,c]);
+  return(<div className="ring" style={{width:size,height:size}}>
+    <svg width={size} height={size}>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--soft-2)" strokeWidth={sw}/>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="url(#rg)" strokeWidth={sw} strokeLinecap="round"
+        strokeDasharray={c} strokeDashoffset={off} style={{transition:"stroke-dashoffset 1.2s var(--ease)"}} transform={`rotate(-90 ${size/2} ${size/2})`}/>
+      <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="var(--accent)"/><stop offset="1" stopColor="var(--accent-2)"/></linearGradient></defs>
+    </svg>
+    <div className="rc">{shown}%<small>Recaudado</small></div>
+  </div>);
+}
+function Bar({label,value,max,money:m,color}){
+  const[w,setW]=useState(0);
+  useEffect(()=>{const x=setTimeout(()=>setW(max?Math.min(100,value/max*100):0),250);return()=>clearTimeout(x);},[value,max]);
+  return(<div className="barrow"><div className="bl"><span>{label}</span><b>{m?money(value):value}</b></div>
+    <div className="bartrack"><i style={{width:w+"%",background:color||"var(--accent)"}}></i></div></div>);
+}
+function ResumenTab({registrants,recT,recC,rec,meta,debtors,presentes}){
+  const pct=meta?rec/meta*100:0;
+  const porBanco=CONFIG.cuentas.map(c=>({banco:c.banco,total:registrants.reduce((s,r)=>s+(r.payments||[]).filter(p=>p.kind==='transfer'&&p.method.includes(c.banco)).reduce((a,p)=>a+p.amount,0),0)}));
+  const maxBanco=Math.max(1,...porBanco.map(b=>b.total),recC);
+  const pagados=registrants.filter(r=>paidOf(r)>=r.total&&r.total>0).length;
+  const parciales=registrants.filter(r=>{const p=paidOf(r);return p>0&&p<r.total;}).length;
+  const sinAbono=registrants.filter(r=>paidOf(r)===0).length;
+  const promedio=registrants.length?Math.round(rec/registrants.length):0;
+  const top=debtors.slice(0,3);
+  return(<div>
+    <div className="dash popin">
+      <Ring pct={pct}/>
+      <div className="barlist">
+        <Bar label="Transferencias verificadas" value={recT} max={meta||1} money color="var(--accent)"/>
+        <Bar label="Efectivo" value={recC} max={meta||1} money color="var(--g2)"/>
+        <Bar label="Falta por recaudar" value={Math.max(0,meta-rec)} max={meta||1} money color="var(--warn)"/>
+      </div>
+    </div>
+    <div className="dash-mini popin" style={{animationDelay:".08s"}}>
+      <div className="m"><div className="v">{money(promedio)}</div><div className="k">Abono promedio</div></div>
+      <div className="m"><div className="v" style={{color:"var(--ok)"}}>{pagados}</div><div className="k">Pago completo</div></div>
+      <div className="m"><div className="v">{presentes}<small style={{fontSize:14,color:"var(--g3)"}}> / {registrants.length}</small></div><div className="k">Check-in</div></div>
+    </div>
+    <div className="adminrow">
+      <div className="box popin" style={{animationDelay:".12s"}}>
+        <h4>Recaudación por banco <span>{money(recT+recC)}</span></h4>
+        <div className="barlist">
+          {porBanco.map(b=><Bar key={b.banco} label={b.banco} value={b.total} max={maxBanco} money color="var(--accent)"/>)}
+          <Bar label="Efectivo (en mano)" value={recC} max={maxBanco} money color="var(--g2)"/>
+        </div>
+      </div>
+      <div className="box popin" style={{animationDelay:".16s"}}>
+        <h4>Estado de pagos <span>{registrants.length}</span></h4>
+        <div className="barlist">
+          <Bar label="Completos" value={pagados} max={registrants.length||1} color="var(--ok)"/>
+          <Bar label="Parciales" value={parciales} max={registrants.length||1} color="var(--accent-2)"/>
+          <Bar label="Sin abono" value={sinAbono} max={registrants.length||1} color="var(--warn)"/>
+        </div>
+        {top.length>0&&<div style={{marginTop:18,borderTop:"1px solid var(--line)",paddingTop:14}}>
+          <div style={{fontSize:11,textTransform:"uppercase",letterSpacing:1,color:"var(--g2)",fontWeight:700,marginBottom:10}}>Mayores pendientes</div>
+          {top.map(r=><div key={r.id} style={{display:"flex",justifyContent:"space-between",fontSize:13,padding:"5px 0"}}><span>{r.name}</span><b style={{color:"var(--warn)"}}>{money(r.total-paidOf(r))}</b></div>)}
+        </div>}
+      </div>
+    </div>
+  </div>);
+}
+
+function CabinsTab({registrants,onCabin}){
+  const groups=CONFIG.cabanas.map(c=>({...c,members:registrants.filter(r=>r.cabin===c.nombre)}));
+  const sin=registrants.filter(r=>!r.cabin||!CONFIG.cabanas.some(c=>c.nombre===r.cabin));
+  const asign=registrants.length-sin.length;
+  return(<div>
+    <div className="toolbar">
+      <div style={{fontSize:13,color:"var(--g2)"}}><b style={{color:"var(--ink)",fontFamily:"'Sora'",fontSize:16}}>{asign}</b> de {registrants.length} asignados a cabaña</div>
+      <button className="btn btn-pri btn-sm" onClick={()=>pdfCabins(registrants)}><span><I n="down" s={14}/> Imprimir cabañas (PDF)</span></button>
+    </div>
+    {sin.length>0&&<div className="box" style={{marginBottom:18,borderStyle:"dashed",borderColor:"var(--line-2)"}}>
+      <h4>Sin asignar <span style={{color:"var(--warn)"}}>{sin.length}</span></h4>
+      {sin.map(r=><div className="alertrow" key={r.id}>
+        <span className={"badge "+(r.tier==='kids'?'k':'n')}>{r.age}</span>
+        <div className="nm"><b>{r.name}</b><i>{r.role==='leader'?'Líder':'Campista'} · {r.code}</i></div>
+        <select value="" onChange={e=>e.target.value&&onCabin(r.id,e.target.value)} style={{width:"auto",padding:"9px 12px",fontSize:13}}>
+          <option value="">Asignar a…</option>{CONFIG.cabanas.map(c=><option key={c.nombre} value={c.nombre}>{c.nombre}</option>)}
+        </select>
+      </div>)}
+    </div>}
+    <div className="cabgrid">
+      {groups.map(g=>{const pct=g.cap?Math.round(g.members.length/g.cap*100):0;const full=g.cap&&g.members.length>=g.cap;
+        return(<div className="box cabcard popin" key={g.nombre}>
+          <h4>{g.nombre}
+            <span style={{display:"flex",alignItems:"center",gap:10}}>
+              <span style={{color:full?"var(--warn)":"var(--g2)"}}>{g.members.length}{g.cap?" / "+g.cap:""}</span>
+              <button className="cabprint" title={"Imprimir "+g.nombre} onClick={()=>pdfCabin(g,registrants)}><I n="down" s={13}/></button>
+            </span>
+          </h4>
+          {g.cap>0&&<div className="bartrack" style={{marginBottom:14}}><i style={{width:Math.min(100,pct)+"%",background:full?"var(--warn)":"linear-gradient(90deg,var(--accent),var(--accent-2))"}}></i></div>}
+          {g.members.length===0&&<p style={{color:"var(--g3)",fontSize:13,padding:"6px 0"}}>Cabaña vacía — asigna desde "Sin asignar".</p>}
+          {g.members.map(r=><div className="cabmem" key={r.id}>
+            <span className={"badge "+(r.tier==='kids'?'k':'n')}>{r.age}</span>
+            <span className="nm">{r.name}{r.role==='leader'&&<span className="lead-tag">Líder</span>}</span>
+            <button className="cabx" title="Quitar de la cabaña" onClick={()=>onCabin(r.id,"")}><I n="x" s={13}/></button>
+          </div>)}
+        </div>);})}
+    </div>
+  </div>);
+}
+
+function ListaTab({registrants,onCash,onRow,onCheckin,notify}){
+  const[tab,setTab]=useState("all"),[q,setQ]=useState(""),[onlyDebt,setOnlyDebt]=useState(false);
+  const[church,setChurch]=useState("all");
+  const[sort,setSort]=useState({k:"name",dir:1});
+  const leaders=registrants.filter(r=>r.role==="leader"),campers=registrants.filter(r=>r.role==="camper");
+  let list=registrants.filter(r=>tab==="all"?true:r.role===tab);
+  if(church!=="all")list=list.filter(r=>r.church===church);
+  if(onlyDebt)list=list.filter(r=>paidOf(r)<r.total);
+  if(q.trim()){const k=q.toLowerCase();list=list.filter(r=>r.name.toLowerCase().includes(k)||r.code.toLowerCase().includes(k));}
+  const val=(r,k)=>k==="abonado"?paidOf(r):k==="age"?r.age:String(r[k]||"").toLowerCase();
+  list=[...list].sort((a,b)=>{const x=val(a,sort.k),y=val(b,sort.k);return(x<y?-1:x>y?1:0)*sort.dir;});
+  const setSortK=(k)=>setSort(s=>({k,dir:s.k===k?-s.dir:1}));
+  const exportCSV=()=>{const rows=[["Codigo","Nombre","Edad","Rol","Cabana","Talla","Iglesia","WhatsApp","Correo","Alergias","Total","Transferencias","Efectivo","Abonado","Pendiente","Estado","Checkin","Nota"]];
+    list.forEach(r=>{const pd=paidOf(r);rows.push([r.code,r.name,r.age,r.role,r.cabin||"",r.size,r.church,r.phone,r.email,r.allergies,r.total,transferOf(r),cashOf(r),pd,r.total-pd,statusOf(r),r.checkin?"Si":"No",r.note||""]);});
+    const csv=rows.map(r=>r.map(c=>`"${String(c||"").replace(/"/g,'""')}"`).join(",")).join("\n");
+    const u=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));const a=document.createElement("a");a.href=u;a.download=`campamento_${tab}.csv`;a.click();notify("Lista exportada");};
+  const H=({k,children})=><th onClick={()=>setSortK(k)}>{children} <span className="ar">{sort.k===k?(sort.dir>0?"▲":"▼"):"◆"}</span></th>;
+  return(<>
+    <div className="toolbar">
+      <div className="tabs">
+        <button className={tab==="all"?"on":""} onClick={()=>setTab("all")}>Todos · {registrants.length}</button>
+        <button className={tab==="camper"?"on":""} onClick={()=>setTab("camper")}>Campistas · {campers.length}</button>
+        <button className={tab==="leader"?"on":""} onClick={()=>setTab("leader")}>Líderes · {leaders.length}</button>
+      </div>
+      <div className="searchwrap">
+        <input placeholder="Buscar nombre o código…" value={q} onChange={e=>setQ(e.target.value)}/>
+        <select value={church} onChange={e=>setChurch(e.target.value)} style={{width:"auto",padding:"10px 14px",fontSize:13}}>
+          <option value="all">Todas las iglesias</option>{CONFIG.iglesias.map(i=><option key={i} value={i}>{i}</option>)}
+        </select>
+        <div className={"toggle"+(onlyDebt?" on":"")} onClick={()=>setOnlyDebt(v=>!v)}>{onlyDebt?<I n="check" s={13}/>:<I n="x" s={13} style={{opacity:.3}}/>} Con deuda</div>
+        <button className="btn btn-ghost btn-sm" onClick={()=>pdfList(list)}><span><I n="down" s={14}/> PDF</span></button>
+        <button className="btn btn-pri btn-sm" onClick={exportCSV}><span><I n="down" s={14}/> CSV</span></button>
+      </div>
+    </div>
+    <div className="tablewrap"><div className="tablescroll"><table>
+      <thead><tr><H k="name">Nombre</H><H k="age">Edad</H><H k="role">Rol</H><H k="size">Talla</H><th>Alergias</th><H k="abonado">Abonado</H><th>Estado</th><th>Check-in</th><th>Contacto</th><th></th></tr></thead>
+      <tbody>
+        {list.map((r,i)=>{const pd=paidOf(r),bal=r.total-pd,st=statusOf(r);const al=r.allergies&&r.allergies!=="Ninguna";
+          const wa=`https://wa.me/${waNum(r.phone)}?text=${encodeURIComponent("Hola "+r.name.split(" ")[0]+", te escribo del "+CONFIG.campamento+".")}`;
+          return(<tr key={r.id} className={r.tier+"-row rowin"} style={{animationDelay:Math.min(i,18)*28+"ms"}} onClick={()=>onRow(r)}>
+            <td><b>{r.name}</b><div style={{fontSize:12,color:"var(--g3)"}}>{r.code}{r.cabin?<span style={{color:"var(--accent-2)"}}> · {r.cabin.split(" · ")[0]}</span>:""}{r.note?<span title="Tiene nota" style={{color:"var(--accent)"}}> · nota</span>:""}</div></td>
+            <td><span className={"badge "+(r.tier==='kids'?'k':'n')}>{r.age} años</span></td>
+            <td><span className={"badge "+(r.role==="leader"?"fill":"out")}>{r.role==="leader"?"Líder":"Campista"}</span></td>
+            <td><span className="badge soft">{r.size||"—"}</span></td>
+            <td style={{fontSize:13}}>{al?<span className="badge dash wr"><I n="alert" s={11}/> {r.allergies}</span>:<span style={{color:"var(--g3)"}}>—</span>}</td>
+            <td><b>{money(pd)}</b><span style={{color:"var(--g3)",fontSize:12}}> /{money(r.total)}</span></td>
+            <td><span className={"badge "+(st==="paid"?"ok":st==="partial"?"out":"wr")}>{st==="paid"?"Pagado":st==="partial"?"Parcial":"Pendiente"}</span></td>
+            <td onClick={e=>e.stopPropagation()}><button className={"checkpill"+(r.checkin?" on":"")} onClick={()=>onCheckin(r.id,!r.checkin)} title="Marcar asistencia"><I n="check" s={13}/> {r.checkin?"Presente":"Marcar"}</button></td>
+            <td onClick={e=>e.stopPropagation()}><a className="iconbtn" href={wa} target="_blank" rel="noreferrer" title="WhatsApp"><I n="msg" s={16}/></a></td>
+            <td onClick={e=>e.stopPropagation()}>{bal>0&&<button className="btn btn-ghost btn-sm" onClick={()=>onCash(r)}><span><I n="cash" s={14}/> Efectivo</span></button>}</td>
+          </tr>);})}
+        {list.length===0&&<tr><td colSpan="10" style={{textAlign:"center",color:"var(--g3)",padding:30}}>Sin registros.</td></tr>}
+      </tbody>
+    </table></div></div>
+    <p className="hint" style={{display:"flex",gap:16,flexWrap:"wrap"}}>
+      <span><b style={{color:"var(--kids)"}}>■</b> 0–10 años</span>
+      <span><b style={{color:"var(--normal)"}}>■</b> 11+ años</span>
+      <span style={{marginLeft:"auto"}}>Toca una fila para la ficha · encabezados para ordenar</span>
+    </p>
+  </>);
+}
+
+function VerifyTab({pending,approve,reject}){
+  const[zoom,setZoom]=useState(null);
+  const[rejecting,setRejecting]=useState(null);
+  const[reason,setReason]=useState("");
+  if(pending.length===0)return(<div className="box" style={{textAlign:"center",padding:50}}>
+    <div style={{marginBottom:12}}><I n="check" s={34}/></div>
+    <h3 style={{fontFamily:"'Sora'",textTransform:"uppercase"}}>Todo verificado</h3>
+    <p style={{color:"var(--g2)",fontSize:14,marginTop:8}}>No hay transferencias pendientes de revisión.</p></div>);
+  return(<>
+    <div className="secbanner"><I n="bank" s={16}/> <span>Compara cada reporte con el <b>estado de cuenta del banco</b> antes de aprobar. Al aprobar, el monto se suma automáticamente al abono de la persona.</span></div>
+    {pending.map(rep=>(<div className="vcard" key={rep.id}>
+      <div className="vhead">
+        <div className="who"><b>{rep.name||"—"}</b><i>{rep.code||rep.registration}</i></div>
+        <span className="badge out">{rep.bank}</span>
+        <div className="amt">{money(rep.amount)}</div>
+      </div>
+      <div className="vbody">
+        <div className="vmeta">
+          <div><b>Referencia</b> {rep.ref||<span style={{color:"var(--warn)"}}>No incluida — verificar por monto y fecha</span>}</div>
+          <div><b>Fecha transf.</b> {rep.date}</div>
+          <div><b>Reportado</b> {(rep.created_at||"").slice(0,10)}</div>
+        </div>
+        {rep.shot?<img className="vshot" src={rep.shot} alt="comprobante" onClick={()=>setZoom(rep.shot)}/>:
+          <div style={{width:90,height:90,border:"1.5px dashed var(--line-2)",display:"grid",placeItems:"center",fontSize:11,color:"var(--g3)",textAlign:"center",padding:6}}>Sin captura</div>}
+      </div>
+      {rejecting===rep.id
+        ?<div className="vfoot" style={{alignItems:"center"}}>
+          <input style={{flex:1,padding:"10px 12px"}} placeholder="Motivo (ej. no aparece en el banco)" value={reason} onChange={e=>setReason(e.target.value)}/>
+          <button className="btn btn-warn btn-sm" onClick={()=>{reject(rep,reason);setRejecting(null);setReason("");}}><span>Confirmar rechazo</span></button>
+          <button className="btn btn-ghost btn-sm" onClick={()=>{setRejecting(null);setReason("");}}><span>Cancelar</span></button>
+        </div>
+        :<div className="vfoot">
+          <button className="btn btn-ok btn-sm" style={{flex:1}} onClick={()=>approve(rep)}><span><I n="check" s={14}/> Verificado en el banco · aprobar</span></button>
+          <button className="btn btn-warn btn-sm" onClick={()=>setRejecting(rep.id)}><span><I n="x" s={14}/> Rechazar</span></button>
+        </div>}
+    </div>))}
+    {zoom&&<div className="bigshot" onClick={()=>setZoom(null)}><img src={zoom} alt="comprobante"/></div>}
+  </>);
+}
+
+function AlertsTab({debtors,dl}){
+  const urgent=dl<=CONFIG.alertaDias;
+  const cuentasTxt=CONFIG.cuentas.map(c=>`${c.banco}: ${c.numero}`).join(" / ");
+  return(<>
+    <div className={urgent?"alertband":"secbanner"} style={urgent?{}:{borderStyle:"solid"}}>
+      <I n={urgent?"alert":"list"} s={22} style={urgent?{color:"var(--warn)",flexShrink:0}:{flexShrink:0}}/>
+      <div>{urgent
+        ?<span>Quedan <b>{dl} días</b>. Hora de cobrar: estas personas aún no completan su pago.</span>
+        :<span>Faltan <b>{dl} días</b> para el campamento. Estas personas tienen balance pendiente — la alarma se enciende a los {CONFIG.alertaDias} días.</span>}</div>
+    </div>
+    {debtors.length===0&&<div className="box" style={{textAlign:"center",padding:50}}>
+      <div style={{marginBottom:12}}><I n="check" s={34}/></div>
+      <h3 style={{fontFamily:"'Sora'",textTransform:"uppercase"}}>Todos al día</h3>
+      <p style={{color:"var(--g2)",fontSize:14,marginTop:8}}>Nadie tiene balance pendiente.</p></div>}
+    {debtors.length>0&&<div className="box">
+      {debtors.map(r=>{const pd=paidOf(r),bal=r.total-pd,pct=Math.round(pd/r.total*100);
+        const msg=encodeURIComponent(`Hola ${r.name.split(" ")[0]}, te saludamos del ${CONFIG.campamento}. Te recordamos que tu balance pendiente es ${money(bal)} (has abonado ${money(pd)} de ${money(r.total)}). Faltan ${dl} días para el campamento. Puedes transferir a: ${cuentasTxt} y reportar tu comprobante en la web, o entregar en efectivo en la iglesia. ¡Bendiciones!`);
+        return(<div className="alertrow" key={r.id}>
+          <div className="nm"><b>{r.name}</b><i>{r.code} · abonó {pct}% · {r.role==="leader"?"Líder":"Campista"}</i></div>
+          <div className="minibar"><i style={{width:pct+"%"}}></i></div>
+          <div className="debt">{money(bal)}</div>
+          <a className="iconbtn" title="Recordatorio por WhatsApp" href={`https://wa.me/${waNum(r.phone)}?text=${msg}`} target="_blank" rel="noreferrer"><I n="msg" s={16}/></a>
+        </div>);})}
+    </div>}
+  </>);
+}
+
+function CashModal({r,onClose,onPay}){
+  const paid=paidOf(r),bal=r.total-paid;const[amt,setAmt]=useState(bal),[method,setMethod]=useState("Efectivo");
+  const valid=amt>0&&amt<=bal;
+  return(<div className="overlay" onClick={onClose}><div className="modal" onClick={e=>e.stopPropagation()}>
+    <button className="close" onClick={onClose}>✕</button>
+    <h3>Registrar pago</h3><p style={{color:"var(--g2)",fontSize:14,marginBottom:20}}>{r.name} · pendiente {money(bal)}</p>
+    <div className="field"><label>Monto recibido</label><input type="number" min="1" max={bal} value={amt} onChange={e=>setAmt(Number(e.target.value))}/></div>
+    <div className="field"><label>Método</label><select value={method} onChange={e=>setMethod(e.target.value)}>{["Efectivo","Transferencia verificada en banco","Otro"].map(m=><option key={m}>{m}</option>)}</select></div>
+    <div className="secbanner" style={{fontSize:12}}><I n="cash" s={15}/> <span>Para dinero entregado en mano o transferencias que verificaste directo en el banco sin reporte del campista.</span></div>
+    <button className="btn btn-pri" style={{width:"100%"}} disabled={!valid} onClick={()=>onPay(amt,method)}><span>Registrar {money(amt)}</span></button>
+  </div></div>);
+}
+
+function DetailModal({r,onClose,onCash,onCheckin,onNote,onCabin}){
+  const paid=paidOf(r),bal=r.total-paid,st=statusOf(r);
+  const[note,setNote]=useState(r.note||"");
+  const dirty=note!==(r.note||"");
+  const wa=`https://wa.me/${waNum(r.phone)}?text=${encodeURIComponent("Hola "+r.name.split(" ")[0]+", te escribo del "+CONFIG.campamento+".")}`;
+  return(<div className="overlay" onClick={onClose}><div className="modal" onClick={e=>e.stopPropagation()}>
+    <button className="close" onClick={onClose}>✕</button>
+    {r.note&&<span className="note-tag" title="Tiene nota"></span>}
+    <h3>{r.name}</h3><p style={{color:"var(--g2)",fontSize:13,marginBottom:6}}>{r.code}</p>
+    <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8,alignItems:"center"}}>
+      <span className={"badge "+(r.role==="leader"?"fill":"out")}>{r.role==="leader"?"Líder":"Campista"}</span>
+      <span className={"badge "+(r.tier==='kids'?'k':'n')}>{TIERS.find(t=>t.id===r.tier)?.label}</span>
+      <span className={"badge "+(st==="paid"?"ok":st==="partial"?"out":"wr")}>{st==="paid"?"Pagado":st==="partial"?"Parcial":"Pendiente"}</span>
+      <button className={"checkpill"+(r.checkin?" on":"")} style={{marginLeft:"auto"}} onClick={()=>onCheckin(r.id,!r.checkin)}><I n="check" s={13}/> {r.checkin?"Presente":"Marcar check-in"}</button>
+    </div>
+    <div className="detail-grid">
+      <div className="d"><div className="k">Edad</div><div className="v">{r.age} años</div></div>
+      <div className="d"><div className="k">Talla</div><div className="v">{r.size||"—"}</div></div>
+      <div className="d"><div className="k">Iglesia</div><div className="v" style={{fontSize:13}}>{r.church}</div></div>
+      <div className="d"><div className="k">WhatsApp</div><div className="v">{r.phone||"—"}</div></div>
+      {r.email&&<div className="d"><div className="k">Correo</div><div className="v" style={{fontSize:13}}>{r.email}</div></div>}
+      <div className="d"><div className="k">Alergias</div><div className="v" style={{fontSize:13}}>{r.allergies&&r.allergies!=="Ninguna"?r.allergies:"Ninguna"}</div></div>
+    </div>
+    <div style={{border:"1px solid var(--ink)",padding:"14px 16px",margin:"4px 0 14px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:14}}><span>Total</span><b>{money(r.total)}</b></div>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:14,marginTop:6}}><span>Transferencias</span><b>{money(transferOf(r))}</b></div>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:14,marginTop:6}}><span>Efectivo</span><b>{money(cashOf(r))}</b></div>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:14,marginTop:6,paddingTop:8,borderTop:"1px solid var(--line)"}}><span>Pendiente</span><b style={{color:bal>0?"var(--warn)":"var(--ok)"}}>{money(bal)}</b></div>
+    </div>
+    {(r.payments||[]).length>0&&<div style={{marginBottom:14}}>
+      <div style={{fontSize:10.5,textTransform:"uppercase",letterSpacing:1,color:"var(--g2)",marginBottom:6,fontWeight:700}}>Historial</div>
+      {(r.payments||[]).map((p,i)=><div className="histrow" key={i} style={{padding:"9px 0"}}><span style={{fontSize:13}}>{(p.created_at||"").slice(0,10)} · {p.method} {p.ref&&<span style={{color:"var(--g3)"}}>({p.ref})</span>}</span><b>{money(p.amount)}</b></div>)}</div>}
+    <div className="field" style={{marginBottom:14}}>
+      <label>Cabaña asignada</label>
+      <select value={r.cabin||""} onChange={e=>onCabin(r.id,e.target.value)}>
+        <option value="">Sin asignar</option>
+        {CONFIG.cabanas.map(c=><option key={c.nombre} value={c.nombre}>{c.nombre}</option>)}
+      </select>
+    </div>
+    <div className="note-area">
+      <label>Nota interna del equipo</label>
+      <textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="Ej. va en el bus 2 · pendiente firma de permiso · contactar a la mamá…"/>
+      <button className="btn btn-ghost btn-sm" style={{width:"100%",marginTop:8}} disabled={!dirty} onClick={()=>onNote(r.id,note)}><span>{dirty?"Guardar nota":"Nota guardada"}</span></button>
+    </div>
+    <div style={{display:"flex",gap:10}}>
+      <a className="btn btn-ghost btn-sm" style={{flex:1,textAlign:"center",textDecoration:"none"}} href={wa} target="_blank" rel="noreferrer"><span><I n="msg" s={14}/> WhatsApp</span></a>
+      {bal>0&&<button className="btn btn-pri btn-sm" style={{flex:1}} onClick={onCash}><span><I n="cash" s={14}/> Registrar pago</span></button>}
+    </div>
+  </div></div>);
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
