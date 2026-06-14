@@ -1,0 +1,14 @@
+{
+  "name": "campamento-tccd",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema de registro y pagos del campamento de jovenes TCCD (transferencias + efectivo, portal del campista, panel admin).",
+  "license": "MIT",
+  "scripts": {
+    "dev": "echo \"Sitio estatico: abre public/index.html en el navegador o usa 'netlify dev'.\"",
+    "lint:print": "echo \"Sin paso de build: la app es un HTML autocontenido.\""
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}
