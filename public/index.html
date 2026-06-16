@@ -27,6 +27,8 @@
 ::selection{background:var(--accent);color:#fff}
 html{scroll-behavior:smooth}html,body{height:100%}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg,video,canvas{max-width:100%}
+img,video{height:auto}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:screen;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:0 26px}
 .ic{display:inline-flex;vertical-align:-3px}
@@ -48,6 +50,14 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0
 .navlinks button::after{content:"";position:absolute;left:16px;right:16px;bottom:6px;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
 .navlinks button:hover{color:var(--ink)}.navlinks button:hover::after{transform:scaleX(1)}
 .navlinks button.on{color:var(--ink)}.navlinks button.on::after{transform:scaleX(1)}
+.navtoggle{display:none}
+.nav-salir-mobile{display:none}
+.burger{position:relative;display:block;width:22px;height:2px;background:currentColor;transition:.3s var(--ease)}
+.burger::before,.burger::after{content:"";position:absolute;left:0;width:22px;height:2px;background:currentColor;transition:.3s var(--ease)}
+.burger::before{top:-7px}.burger::after{top:7px}
+.burger.x{background:transparent}
+.burger.x::before{top:0;transform:rotate(45deg)}
+.burger.x::after{top:0;transform:rotate(-45deg)}
 .reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .reveal.in{opacity:1;transform:none}
 .btn{font-family:inherit;font-weight:700;font-size:15px;border:1.5px solid var(--line-2);border-radius:3px;padding:15px 26px;cursor:pointer;transition:transform .3s var(--ease),background .3s,color .3s,box-shadow .3s;position:relative;overflow:hidden;will-change:transform;color:var(--ink);background:transparent}
@@ -121,7 +131,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:26px 0
 .panel .lead{color:var(--g2);margin-bottom:30px;font-size:15px}
 label{display:block;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.8px;margin:0 0 9px;color:var(--g1)}
 .field{margin-bottom:22px}
-input,select,textarea{width:100%;font-family:inherit;font-size:15px;padding:14px 16px;border:1.5px solid var(--line-2);border-radius:3px;background:var(--panel-2);transition:.2s;color:var(--ink)}
+input,select,textarea{width:100%;font-family:inherit;font-size:16px;padding:14px 16px;border:1.5px solid var(--line-2);border-radius:3px;background:var(--panel-2);transition:.2s;color:var(--ink)}
 input::placeholder,textarea::placeholder{color:var(--g3)}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 select option{background:var(--panel)}
@@ -317,7 +327,31 @@ footer{border-top:1.5px solid var(--accent);padding:54px 0 34px;margin-top:80px}
 .cabprint{width:28px;height:28px;border:1.5px solid var(--line-2);background:transparent;color:var(--g2);cursor:pointer;border-radius:4px;display:grid;place-items:center;transition:.2s}
 .cabprint:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 @media(max-width:760px){.cabgrid{grid-template-columns:1fr}}
-@media(max-width:760px){.tiles,.stats,.adminrow,.band{grid-template-columns:1fr}.row2,.balgrid,.detail-grid{grid-template-columns:1fr}.navlinks{display:none}.searchwrap input{width:100%}.tile:nth-child(3n){border-right:1px solid var(--line)}.tallagrid{grid-template-columns:repeat(3,1fr)}.vcard .vbody{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--line)}}
+@media(max-width:760px){.tiles,.stats,.adminrow,.band{grid-template-columns:1fr}.row2,.balgrid,.detail-grid{grid-template-columns:1fr}.searchwrap input{width:100%}.tile:nth-child(3n){border-right:1px solid var(--line)}.tallagrid{grid-template-columns:repeat(3,1fr)}.vcard .vbody{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--line)}
+nav{flex-wrap:wrap;padding:16px 0}
+.logo{font-size:14px;gap:8px}.logo .mark{width:34px;height:34px}
+.navtoggle{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;background:transparent;border:1px solid var(--line);border-radius:6px;color:var(--ink);cursor:pointer}
+.navlinks{display:none;flex-direction:column;width:100%;order:3;gap:0;margin-top:12px;border-top:1px solid var(--line)}
+.navlinks.open{display:flex}
+.navlinks button{width:100%;text-align:left;padding:0 6px;min-height:54px;font-size:16px;border-bottom:1px solid var(--line)}
+.navlinks button::after{display:none}
+.nav-salir-desktop{display:none}
+.nav-salir-mobile{display:flex;align-items:center;gap:8px;width:100%;min-height:54px;padding:0 6px;font-family:inherit;font-weight:600;font-size:16px;color:var(--accent);background:transparent;border:none;cursor:pointer}
+.btn{min-height:50px}.btn-sm{min-height:46px}.iconbtn{width:44px;height:44px}.copybtn{min-height:40px}.checkpill{min-height:40px}.tabs button{min-height:46px}}
+@media(max-width:480px){.wrap{padding:0 16px}.panel{padding:24px 18px}.panel h2{font-size:24px}.hero-foot{gap:16px}.hero-foot p{max-width:100%}.tallagrid{grid-template-columns:repeat(2,1fr)}.rot{width:96px;height:96px;top:64px}}
+
+/* ===== HERO v2 — solo pantalla principal (centrado + marca de agua) ===== */
+.hero-v2{padding:96px 0 46px;text-align:center;min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero-v2 .tag{justify-content:center;margin-bottom:24px;position:relative;z-index:3}
+.hero-v2 h1{font-size:clamp(44px,11vw,124px);line-height:.94;position:relative;z-index:3}
+.hero-v2 .hl2{display:block}
+.hero-v2 .hero-sub{position:relative;z-index:3;max-width:580px;margin:30px auto 0;color:var(--g1);font-size:17px;line-height:1.6}
+.hero-v2 .hero-cta{justify-content:center;margin-top:36px;position:relative;z-index:3}
+.hero-v2 .year-big{position:absolute;left:0;right:0;top:9%;margin:0 auto;text-align:center;opacity:.08;z-index:0;font-size:clamp(170px,40vw,440px);line-height:.8}
+.hero-v2 .rot{top:auto;bottom:8px;right:8px}
+@media(max-width:760px){.hero-v2{min-height:auto;padding:62px 0 30px}.hero-v2 .rot{display:none}.hero-v2 .year-big{top:14%}}
+
+
 
 </style>
 </head>
@@ -361,9 +395,14 @@ const TIERS=[
   {id:"normal",label:"11 años en adelante",min:11,max:120,price:4500, cls:"normal"},
 ];
 const DEMO_ADMINS=[
-  {email:"jhonfrer@tccd.do",pass:"campamento26"},
-  {email:"genesis@tccd.do",pass:"campamento26"},
-  {email:"tesoreria@tccd.do",pass:"campamento26"},
+  {email:"jhonfrer@tccd.do",pass:"tccd2026"},
+  {email:"kiara@tccd.do",pass:"tccd2026"},
+  {email:"genesismelo@tccd.do",pass:"tccd2026"},
+  {email:"analiz@tccd.do",pass:"tccd2026"},
+  {email:"paula@tccd.do",pass:"tccd2026"},
+  {email:"genesisalfonso@tccd.do",pass:"tccd2026"},
+  {email:"lionekelly@tccd.do",pass:"tccd2026"},
+  {email:"ysaura@tccd.do",pass:"tccd2026"},
 ];
 
 /* ===== ICONOGRAFÍA PROFESIONAL (SVG, trazo consistente) ===== */
@@ -523,19 +562,24 @@ function Splash(){
 function WaveField(){
   const ref=useRef();
   useEffect(()=>{
-    const cv=ref.current;if(!cv)return;const ctx=cv.getContext('2d');let raf,t=0,my=.5;
-    const fit=()=>{cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;};fit();
-    const onm=e=>{const r=cv.getBoundingClientRect();my=(e.clientY-r.top)/r.height;};
-    addEventListener('resize',fit);addEventListener('mousemove',onm);
-    const draw=()=>{const w=cv.width,h=cv.height;ctx.clearRect(0,0,w,h);const lines=18;
-      for(let l=0;l<lines;l++){const yb=h*(l/(lines-1));ctx.beginPath();
-        const near=1-Math.min(1,Math.abs(my-(l/lines))*2.2);const amp=8+l*1.1+near*30;
-        for(let x=0;x<=w;x+=9){const y=yb+Math.sin(x*0.011+t+l*0.45)*amp*0.42+Math.cos(x*0.005-t*0.7)*amp*0.3;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-        ctx.strokeStyle=`rgba(${90+near*60},${130+near*40},255,${0.10+l*0.006+near*0.30})`;ctx.lineWidth=near>0.6?1.5:1;
-        ctx.shadowColor='rgba(58,109,255,0.5)';ctx.shadowBlur=near*10;ctx.stroke();ctx.shadowBlur=0;}
-      t+=0.013;raf=requestAnimationFrame(draw);};
+    const cv=ref.current;if(!cv)return;const ctx=cv.getContext('2d');let raf,W=0,H=0;
+    const mouse={x:-999,y:-999};
+    const fit=()=>{W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;};fit();
+    const N=Math.min(92,Math.floor((cv.offsetWidth*cv.offsetHeight)/13000));
+    const ps=Array.from({length:N},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.42,vy:(Math.random()-.5)*.42,r:Math.random()*1.6+.6}));
+    const onm=e=>{const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;};
+    const onl=()=>{mouse.x=-999;mouse.y=-999;};
+    addEventListener('resize',fit);addEventListener('mousemove',onm);cv.addEventListener('mouseleave',onl);
+    const draw=()=>{ctx.clearRect(0,0,W,H);
+      for(const p of ps){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fillStyle='rgba(125,155,255,.75)';ctx.fill();}
+      for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const a=ps[i],b=ps[j];const dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+        if(d<118){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(58,109,255,'+(0.18*(1-d/118)).toFixed(3)+')';ctx.lineWidth=1;ctx.stroke();}}}
+      for(const p of ps){const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);
+        if(d<165){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(mouse.x,mouse.y);ctx.strokeStyle='rgba(106,147,255,'+(0.32*(1-d/165)).toFixed(3)+')';ctx.lineWidth=1;ctx.stroke();}}
+      raf=requestAnimationFrame(draw);};
     draw();
-    return()=>{cancelAnimationFrame(raf);removeEventListener('resize',fit);removeEventListener('mousemove',onm);};
+    return()=>{cancelAnimationFrame(raf);removeEventListener('resize',fit);removeEventListener('mousemove',onm);cv.removeEventListener('mouseleave',onl);};
   },[]);
   return<canvas ref={ref} className="wavefield"/>;
 }
@@ -707,10 +751,16 @@ function App(){
 
 function Nav({view,go,session,logout}){
   const links=[["home","Inicio"],["register","Inscripción"],["balance","Mi portal"],["admin","Admin"]];
+  const [open,setOpen]=React.useState(false);
+  const pick=(k)=>{setOpen(false);go(k);};
   return(<nav>
-    <div className="logo" onClick={()=>go('home')}><div className="mark"><I n="tent" s={20}/></div><span>CAMPAMENTO {CONFIG.iglesia}</span></div>
-    <div className="navlinks">{links.map(([k,l])=><button key={k} className={view===k||(k==='admin'&&view==='login')?"on":""} onClick={()=>go(k)}>{l}</button>)}</div>
-    {session&&<button className="btn btn-ghost btn-sm" onClick={logout}><span><I n="out" s={14}/> Salir</span></button>}
+    <div className="logo" onClick={()=>pick('home')}><div className="mark"><I n="tent" s={20}/></div><span>CAMPAMENTO {CONFIG.iglesia}</span></div>
+    <button className="navtoggle" aria-label="Abrir menú" aria-expanded={open} onClick={()=>setOpen(o=>!o)}><span className={"burger"+(open?" x":"")}></span></button>
+    <div className={"navlinks"+(open?" open":"")}>
+      {links.map(([k,l])=><button key={k} className={view===k||(k==='admin'&&view==='login')?"on":""} onClick={()=>pick(k)}>{l}</button>)}
+      {session&&<button className="nav-salir-mobile" onClick={()=>{setOpen(false);logout();}}><I n="out" s={16}/> Salir</button>}
+    </div>
+    {session&&<button className="btn btn-ghost btn-sm nav-salir-desktop" onClick={logout}><span><I n="out" s={14}/> Salir</span></button>}
   </nav>);
 }
 
@@ -719,23 +769,21 @@ function Home({go,registrants}){
   const cupo=registrants.length;const pct=Math.min(100,Math.round(cupo/CONFIG.cupoMax*100));
   const[w,setW]=useState(0);useEffect(()=>{const t=setTimeout(()=>setW(pct),300);return()=>clearTimeout(t);},[pct]);
   return(<div>
-    <section className="hero">
+    <section className="hero hero-v2">
       <WaveField/>
-      <RotSeal onClick={()=>go('register')}/>
+      <div className="year-big" id="yearbig">2026</div>
       <div className="tag"><span className="ln"></span><span className="dot"></span> Inscripciones abiertas</div>
       <h1>
-        <Scramble text="Nos vamos" delay={1650} className="hl2"/>
-        <Scramble text="al camp—" delay={1800} className="hl2 out"/>
-        <Scramble text="amento." delay={1950} className="hl2"/>
+        <Scramble text="Vívelo." delay={1450} className="hl2"/>
+        <Scramble text="Campamento" delay={1650} className="hl2 out"/>
+        <Scramble text="TCCD 2026." delay={1850} className="hl2"/>
       </h1>
-      <div className="hero-foot">
-        <p>Regístrate en un minuto, abona por transferencia o en efectivo, y consulta tu saldo cuando quieras.</p>
-        <div className="cta-row">
-          <Magnetic className="btn btn-pri" onClick={()=>go('register')}><span>Inscribirme ahora <I n="arrowr" s={16}/></span></Magnetic>
-          <Magnetic className="btn btn-ghost" onClick={()=>go('balance')}><span>Mi portal</span></Magnetic>
-        </div>
+      <p className="hero-sub">Una experiencia para vivir, crecer y conectar. Regístrate en un minuto, abona por transferencia o efectivo, y consulta tu saldo cuando quieras.</p>
+      <div className="cta-row hero-cta">
+        <Magnetic className="btn btn-pri" onClick={()=>go('register')}><span>Inscribirme ahora <I n="arrowr" s={16}/></span></Magnetic>
+        <Magnetic className="btn btn-ghost" onClick={()=>go('balance')}><span>Mi portal</span></Magnetic>
       </div>
-      <div className="year-big" id="yearbig">2026</div>
+      <RotSeal onClick={()=>go('register')}/>
     </section>
     <div className="marquee"><div className="marquee-track">
       {[0,1].map(k=><span key={k}>Campamento 2026 <span className="o">—</span> TCCD <span className="o">—</span> Inscríbete ya <span className="o">—</span> Casa de Dios <span className="o">—</span> </span>)}
@@ -1038,7 +1086,7 @@ function Login({onLogin}){
     <div className="field"><label>Correo</label><input value={e} onChange={ev=>{setE(ev.target.value);setErr("");}} placeholder="tucorreo@tccd.do" onKeyDown={ev=>ev.key==='Enter'&&tryLogin()}/></div>
     <div className="field"><label>Contraseña</label><input type="password" value={p} onChange={ev=>{setP(ev.target.value);setErr("");}} placeholder="••••••••" onKeyDown={ev=>ev.key==='Enter'&&tryLogin()}/></div>
     <button className="btn btn-pri" style={{width:"100%"}} disabled={busy} onClick={tryLogin}><span>{busy?"Verificando…":"Entrar"}</span></button>
-    {!IS_PROD&&<p className="hint" style={{marginTop:14}}>Demo: <b>jhonfrer@tccd.do</b> / <b>campamento26</b></p>}
+    {!IS_PROD&&<p className="hint" style={{marginTop:14}}>Demo: <b>kiara@tccd.do</b> / <b>tccd2026</b></p>}
   </div></Reveal>);
 }
 
