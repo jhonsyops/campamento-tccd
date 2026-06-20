@@ -667,8 +667,8 @@ function App(){
   const addRegistrant=async(fd)=>{
     const t=tierFor(Number(fd.age));
     const payload={code:genCode(),...fd,age:Number(fd.age),tier:t.id,total:t.price};
-    if(IS_PROD){setLoading(true);const{data:ins,error}=await sbPublic.from('registrations').insert([payload]).select().single();setLoading(false);
-      if(error){notify('Error: '+error.message);return;}setJustReg({...ins,payments:[]});store.set('tccd_code',ins.code);}
+    if(IS_PROD){setLoading(true);const{error}=await sbPublic.from('registrations').insert([payload]);setLoading(false);
+      if(error){notify('Error: '+error.message);return;}setJustReg({...payload,payments:[]});store.set('tccd_code',payload.code);}
     else{const d={id:crypto.randomUUID(),...payload,payments:[]};setRegistrants(p=>[d,...p]);setJustReg(d);store.set('tccd_code',d.code);}
     confettiBurst();
   };
