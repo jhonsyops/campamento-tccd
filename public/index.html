@@ -363,7 +363,7 @@ const { useState, useEffect, useRef } = React;
 
 /* ⚙️ PASO 1 — credenciales Supabase (mientras tanto corre en demo) */
 const SUPABASE_URL = "https://wluqjsduskinomztvrca.supabase.co";
-const SUPABASE_KEY = "sb_publishable_QhLckmcY-qauQCWJ9UMsCw_gQ8r0bRr";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsdXFqc2R1c2tpbm9tenR2cmNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDAzODAsImV4cCI6MjA5Njk3NjM4MH0.oprLgagw-zuIR2H5tqh4I3Gbj1fGcfZ-xgp529RtQl4";
 const IS_PROD = !SUPABASE_URL.includes("TU-PROYECTO");
 const sb = IS_PROD ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
