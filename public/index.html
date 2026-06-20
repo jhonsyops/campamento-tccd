@@ -366,6 +366,8 @@ const SUPABASE_URL = "https://wluqjsduskinomztvrca.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsdXFqc2R1c2tpbm9tenR2cmNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDAzODAsImV4cCI6MjA5Njk3NjM4MH0.oprLgagw-zuIR2H5tqh4I3Gbj1fGcfZ-xgp529RtQl4";
 const IS_PROD = !SUPABASE_URL.includes("TU-PROYECTO");
 const sb = IS_PROD ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+/* Cliente PÚBLICO aislado: nunca lleva la sesión de admin, siempre actúa como anónimo (para inscripción, portal y reportes) */
+const sbPublic = IS_PROD ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false, autoRefreshToken:false, storageKey:"sb-public-noauth"}}) : null;
 
 /* ⚙️ PASO 2 — CONFIGURACIÓN DEL CAMPAMENTO */
 const CONFIG = {
@@ -665,7 +667,7 @@ function App(){
   const addRegistrant=async(fd)=>{
     const t=tierFor(Number(fd.age));
     const payload={code:genCode(),...fd,age:Number(fd.age),tier:t.id,total:t.price};
-    if(IS_PROD){setLoading(true);const{data:ins,error}=await sb.from('registrations').insert([payload]).select().single();setLoading(false);
+    if(IS_PROD){setLoading(true);const{data:ins,error}=await sbPublic.from('registrations').insert([payload]).select().single();setLoading(false);
       if(error){notify('Error: '+error.message);return;}setJustReg({...ins,payments:[]});store.set('tccd_code',ins.code);}
     else{const d={id:crypto.randomUUID(),...payload,payments:[]};setRegistrants(p=>[d,...p]);setJustReg(d);store.set('tccd_code',d.code);}
     confettiBurst();
@@ -674,8 +676,8 @@ function App(){
     if(IS_PROD){
       setLoading(true);let shotPath=null;
       if(rep.shotFile){const path=`${Date.now()}_${rep.shotFile.name.replace(/[^a-zA-Z0-9_.-]/g,'')}`;
-        const{error:upErr}=await sb.storage.from('vouchers').upload(path,rep.shotFile);if(!upErr)shotPath=path;}
-      const{error}=await sb.from('transfer_reports').insert({registration:rep.registration,bank:rep.bank,amount:rep.amount,ref:rep.ref,date:rep.date,shot:shotPath,status:'pending'});
+        const{error:upErr}=await sbPublic.storage.from('vouchers').upload(path,rep.shotFile);if(!upErr)shotPath=path;}
+      const{error}=await sbPublic.from('transfer_reports').insert({registration:rep.registration,bank:rep.bank,amount:rep.amount,ref:rep.ref,date:rep.date,shot:shotPath,status:'pending'});
       setLoading(false);if(error){notify('Error: '+error.message);return false;}
     }else setReports(p=>[...p,{...rep,id:crypto.randomUUID(),status:'pending',created_at:new Date().toISOString().slice(0,10)}]);
     confettiBurst();return true;
@@ -890,11 +892,11 @@ function MiPortal({registrants,reports,onReport}){
   const me=IS_PROD?fetched:deriveDemo(code);
   const remember=(c)=>{setCode(c);store.set('tccd_code',c);};
   const fetchCode=async(c,silent)=>{setErr("");setNotFound(false);setBusy(!silent);
-    const{data,error}=await sb.rpc('get_registration_by_code',{p_code:c.trim()});setBusy(false);
+    const{data,error}=await sbPublic.rpc('get_registration_by_code',{p_code:c.trim()});setBusy(false);
     if(error){if(!silent)setErr('Error: '+error.message);return;}
     if(data){setFetched({...data,payments:data.payments||[],reports:data.reports||[]});remember(data.code);}else if(!silent)setNotFound(true);};
   const fetchPhone=async(ph)=>{setErr("");setNotFound(false);setBusy(true);
-    const{data,error}=await sb.rpc('get_registration_by_phone',{p_phone:ph});setBusy(false);
+    const{data,error}=await sbPublic.rpc('get_registration_by_phone',{p_phone:ph});setBusy(false);
     if(error){setErr('Error: '+error.message);return;}
     if(data){setFetched({...data,payments:data.payments||[],reports:data.reports||[]});remember(data.code);}else setNotFound(true);};
   useEffect(()=>{const s=store.get('tccd_code');if(s&&IS_PROD)fetchCode(s,true);},[]);
