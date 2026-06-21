@@ -668,7 +668,10 @@ function App(){
     const t=tierFor(Number(fd.age));
     const payload={code:genCode(),...fd,age:Number(fd.age),tier:t.id,total:t.price};
     if(IS_PROD){setLoading(true);const{error}=await sbPublic.from('registrations').insert([payload]);setLoading(false);
-      if(error){notify('Error: '+error.message);return;}setJustReg({...payload,payments:[]});store.set('tccd_code',payload.code);}
+      if(error){notify('Error: '+error.message);return;}
+      const{data:fetched}=await sbPublic.rpc('get_registration_by_code',{p_code:payload.code});
+      const reg=fetched||{...payload,payments:[]};
+      setJustReg({...reg,payments:reg.payments||[]});store.set('tccd_code',payload.code);}
     else{const d={id:crypto.randomUUID(),...payload,payments:[]};setRegistrants(p=>[d,...p]);setJustReg(d);store.set('tccd_code',d.code);}
     confettiBurst();
   };
