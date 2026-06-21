@@ -481,7 +481,17 @@ function useCountUp(t,on){const[v,s]=useState(0);useEffect(()=>{if(!on)return;co
 function useCountdown(){const calc=()=>{const diff=new Date(CONFIG.fechaCampamento)-new Date();if(diff<=0)return null;return{d:Math.floor(diff/864e5),h:Math.floor(diff/36e5)%24,m:Math.floor(diff/6e4)%60,s:Math.floor(diff/1e3)%60};};const[t,setT]=useState(calc);useEffect(()=>{const i=setInterval(()=>setT(calc()),1000);return()=>clearInterval(i);},[]);return t;}
 function confettiBurst(){const c=document.createElement("div");c.className="confetti";for(let i=0;i<60;i++){const p=document.createElement("i");p.style.left=Math.random()*100+"vw";p.style.animationDuration=(1.6+Math.random()*1.4)+"s";p.style.animationDelay=Math.random()*.3+"s";if(i%3===0){p.style.background="transparent";p.style.border="1.5px solid #0a0a0a";}c.appendChild(p);}document.body.appendChild(c);setTimeout(()=>c.remove(),3200);}
 /* ===== Impresión / PDF con logo ===== */
-/* esc(): escapa HTML para impedir XSS al construir los PDF con datos del usuario */
+/* ShotImg: carga imagen del bucket privado generando URL firmada con el cliente admin */
+function ShotImg({path,className,onClick,alt="comprobante"}){
+  const[url,setUrl]=useState(null);
+  useEffect(()=>{
+    if(!path||!sb)return;
+    sb.storage.from('vouchers').createSignedUrl(path,600)
+      .then(({data})=>{if(data?.signedUrl)setUrl(data.signedUrl);});
+  },[path]);
+  if(!url)return<div className={className} style={{background:'var(--soft-2)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--g3)',fontSize:11}}>...</div>;
+  return<img className={className} src={url} alt={alt} onClick={onClick}/>;
+}
 const esc=(s)=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function printDoc(contentHTML,docTitle){
   const today=new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'});
@@ -1353,7 +1363,7 @@ function VerifyTab({pending,approve,reject}){
           <div><b>Fecha transf.</b> {rep.date}</div>
           <div><b>Reportado</b> {(rep.created_at||"").slice(0,10)}</div>
         </div>
-        {rep.shot?<img className="vshot" src={rep.shot} alt="comprobante" onClick={()=>setZoom(rep.shot)}/>:
+        {rep.shot?<ShotImg className="vshot" path={rep.shot} onClick={()=>setZoom(rep.shot)}/>:
           <div style={{width:90,height:90,border:"1.5px dashed var(--line-2)",display:"grid",placeItems:"center",fontSize:11,color:"var(--g3)",textAlign:"center",padding:6}}>Sin captura</div>}
       </div>
       {rejecting===rep.id
@@ -1367,7 +1377,7 @@ function VerifyTab({pending,approve,reject}){
           <button className="btn btn-warn btn-sm" onClick={()=>setRejecting(rep.id)}><span><I n="x" s={14}/> Rechazar</span></button>
         </div>}
     </div>))}
-    {zoom&&<div className="bigshot" onClick={()=>setZoom(null)}><img src={zoom} alt="comprobante"/></div>}
+    {zoom&&<div className="bigshot" onClick={()=>setZoom(null)}><ShotImg path={zoom} style={{maxWidth:'100%',maxHeight:'90vh',border:'2px solid var(--accent)'}}/></div>}
   </>);
 }
 
